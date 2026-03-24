@@ -308,18 +308,49 @@
     .arch-tabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1.8rem; flex-wrap: wrap; }
     .atab { padding: 0.45rem 1.2rem; border-radius: 20px; font-size: 0.83rem; font-weight: 600; border: 2px solid var(--gray-200); background: #fff; cursor: pointer; transition: all 0.2s; color: var(--gray-600); font-family: 'Noto Sans KR', sans-serif; }
     .atab.on, .atab:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
-    .arch-list { display: flex; flex-direction: column; gap: 0.9rem; }
-    .arch-item { background: #fff; border-radius: 12px; padding: 1.2rem 1.4rem; display: flex; align-items: center; gap: 1.1rem; border: 1px solid var(--gray-200); transition: all 0.2s; }
+    .arch-list { display: flex; flex-direction: column; gap: 1rem; }
+    .arch-item { background: #fff; border-radius: 14px; padding: 1.25rem 1.35rem; border: 1px solid var(--gray-200); transition: all 0.2s; }
     .arch-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); border-color: var(--cyan); }
+    .arch-top { display: flex; align-items: flex-start; gap: 1rem; }
     .atype { min-width: 58px; text-align: center; padding: 0.28rem 0; font-size: 0.7rem; font-weight: 700; border-radius: 6px; }
     .t-rep { background: #eff6ff; color: #2563eb; }
     .t-pap { background: #fefce8; color: #ca8a04; }
     .t-pol { background: #f0fdf4; color: #16a34a; }
-    .ainfo { flex: 1; }
-    .ainfo h4 { font-family: 'Noto Sans KR', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 0.2rem; }
-    .ainfo span { font-size: 0.76rem; color: var(--gray-400); }
+    .ainfo { flex: 1; min-width: 0; }
+    .ainfo h4 { font-family: 'Noto Sans KR', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem; line-height: 1.5; }
+    .ainfo .meta { font-size: 0.76rem; color: var(--gray-400); display: block; margin-bottom: 0.55rem; }
+    .ainfo .summary { font-size: 0.82rem; color: var(--gray-600); line-height: 1.65; }
+    .arch-actions { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 0.95rem; }
+    .arch-btn, .arch-link {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
+      padding: 0.55rem 0.9rem; border-radius: 8px; font-size: 0.78rem; font-weight: 700;
+      font-family: 'Noto Sans KR', sans-serif; cursor: pointer; transition: all 0.2s;
+      border: 1px solid var(--gray-200); background: #fff; color: var(--gray-800);
+    }
+    .arch-btn:hover, .arch-link:hover { border-color: var(--cyan); color: var(--cyan); }
+    .arch-link.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .arch-link.primary:hover { background: var(--navy-mid); border-color: var(--navy-mid); color: #fff; }
+    .arch-admin-tools { margin-left: auto; display: none; }
+    body.admin-mode .arch-admin-tools { display: block; }
     .adl { background: var(--gray-100); border: none; cursor: pointer; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: all 0.2s; color: var(--gray-600); }
-    .adl:hover { background: var(--cyan); color: #fff; }
+    .adl:hover { background: #fee2e2; color: #dc2626; }
+    .arch-note { margin-top: 0.55rem; font-size: 0.74rem; color: var(--gray-400); }
+    .help-chip { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: var(--cyan); font-weight: 700; background: var(--cyan-pale); padding: 0.3rem 0.75rem; border-radius: 999px; margin-top: 0.75rem; }
+    .drive-guide { max-width: 720px; margin: 1rem auto 1.8rem; font-size: 0.8rem; color: var(--gray-600); text-align: center; }
+    .drive-guide strong { color: var(--navy); }
+    .archive-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 2100; align-items: center; justify-content: center; padding: 1rem; }
+    .archive-modal-overlay.open { display: flex; }
+    .archive-modal { width: min(760px, 96vw); max-height: 88vh; overflow-y: auto; background: #fff; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.28); }
+    .archive-modal-hd { display: flex; justify-content: space-between; gap: 1rem; padding: 1.2rem 1.4rem; background: var(--navy); color: #fff; border-radius: 20px 20px 0 0; }
+    .archive-modal-hd h3 { font-size: 1rem; line-height: 1.5; }
+    .archive-modal-close { background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; font-size: 1.5rem; line-height: 1; }
+    .archive-modal-close:hover { color: #fff; }
+    .archive-modal-body { padding: 1.3rem 1.4rem 1.5rem; }
+    .detail-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+    .detail-meta span { background: var(--gray-100); border: 1px solid var(--gray-200); color: var(--gray-600); border-radius: 999px; padding: 0.25rem 0.65rem; font-size: 0.73rem; }
+    .detail-block { margin-bottom: 1rem; }
+    .detail-block h4 { font-family: 'Noto Sans KR', sans-serif; color: var(--navy); font-size: 0.84rem; margin-bottom: 0.35rem; }
+    .detail-block p { color: var(--gray-600); font-size: 0.84rem; line-height: 1.75; white-space: pre-wrap; }
 
     /* ── NEWS ── */
     #news { background: #fff; }
@@ -466,7 +497,7 @@
   <div class="hero-bg-grid"></div>
   <div class="hero-glow"></div>
   <div class="hero-content">
-    <div class="hero-badge">🏛️ 비영리 사단법인 · 제주특별자치도 · www.jejuailab.com</div>
+    <div class="hero-badge">🏛️ 비영리 사단법인 · 제주특별자치도 · www.ai-jeju.re.kr</div>
     <h1 class="hero-title">데이터로 제주의 내일을 설계하고,<br><span class="hero-accent">정책의 길을 제시합니다.</span></h1>
     <p class="hero-subtitle">실사구시(實事求是)형 AI 연구 · End-to-End 솔루션</p>
     <p class="hero-desc">기술(Tech)과 인문사회학(Context)의 진정한 결합.<br>데이터의 수집부터 최종 의사결정 지원까지 아우르는 실용적 연구 모델을 제시합니다.</p>
@@ -572,9 +603,9 @@
         </div>
         <div class="contact-info">
           <div class="contact-row">📍 <strong>주소</strong> 제주특별자치도 제주시 이도일동 1289-18, 307호</div>
-          
-          <div class="contact-row">✉️ <strong>이메일</strong> yangih71@gmail.com</div>
-          <div class="contact-row">🌐 <strong>홈페이지</strong> <span class="web">www.jejuailab.com</span></div>
+          <div class="contact-row">📞 <strong>대표전화</strong> 064-000-0000</div>
+          <div class="contact-row">✉️ <strong>이메일</strong> contack@gmail.com</div>
+          <div class="contact-row">🌐 <strong>홈페이지</strong> <span class="web">www.ai-jeju.re.kr</span></div>
           <div class="contact-row">👤 <strong>담당자</strong> 김대훈 이사 · 010-4931-1855</div>
           <a href="https://map.kakao.com" target="_blank" class="map-btn">🗺️ 카카오맵으로 보기</a>
         </div>
@@ -610,9 +641,9 @@
           <div class="m-avatar">김</div>
           <span class="m-badge">Ph.D · 공학</span>
           <div class="m-name">김성훈</div>
-          <div class="m-field">안전 / 조선해양공학 · 이사</div>
+          <div class="m-field">안전 / AI 공학 · 이사</div>
           <div class="m-univ">서울대학교</div>
-          <div class="m-desc">英 로이드 선급 컨설턴트<br>수소/LNG/해양 플랜트 리스크,HAZID/HAZOP/QRA수행<br>FlexBowTie SW 개발</div>
+          <div class="m-desc">英 로이드 선급 수석 컨설턴트<br>수소/해양 플랜트 리스크<br>FlexBowTie SW 개발</div>
         </div>
         <div class="member">
           <div class="m-avatar">고</div>
@@ -819,9 +850,11 @@
     <div class="sec-hd">
       <div class="sec-tag">Archive</div>
       <h2 class="sec-title">자료실</h2>
-      <p class="sec-desc">논문 제목 또는 연구책임자 성명으로 검색 가능</p>
+      <p class="sec-desc">논문·보고서·정책자료를 링크형으로 정리한 자료실입니다. 제목 또는 저자/기관명으로 검색할 수 있습니다.</p>
       <div class="divider"></div>
+      <div class="help-chip">☁️ 파일은 구글드라이브에 저장하고, 자료실에는 설명과 링크만 등록합니다.</div>
     </div>
+    <div class="drive-guide"><strong>운영 팁:</strong> 구글드라이브에서 파일 공유 권한을 “링크가 있는 모든 사용자 - 보기 가능”으로 설정한 뒤 해당 링크를 등록하세요.</div>
     <div class="arch-search">
       <input id="archQ" type="text" placeholder="논문 제목 또는 연구책임자 성명..." />
       <button onclick="searchArch()">검색</button>
@@ -885,7 +918,7 @@
         <div class="frow">
           <div class="fgrp fcol2"><label>자문 내용</label><textarea placeholder="자문 요청 내용을 간략히 기재해 주세요..."></textarea></div>
         </div>
-        <button class="fsub" onclick="submitForm()">✉️ 자문 신청하기 — yangih71@gmail.com</button>
+        <button class="fsub" onclick="submitForm()">✉️ 자문 신청하기 — contack@gmail.com</button>
       </div>
     </div>
   </div>
@@ -899,8 +932,8 @@
         <div class="fn">사단법인 AI융합연구소</div>
         <p>기술(Tech)과 인문사회학(Context)의 진정한 결합으로<br>실사구시형 AI 연구를 추구합니다.<br>데이터 기반 의사결정 문화 정착과 지역 혁신 생태계 조성에 기여합니다.</p>
         <div class="addr">📍 제주특별자치도 제주시 이도일동 1289-18, 307호</div>
-        <div class="addr">📞 010-4931-1855 &nbsp;|&nbsp; ✉️ yangih71@gmail.com</div>
-        <div class="addr web">🌐 www.jejuailab.com</div>
+        <div class="addr">📞 064-000-0000 &nbsp;|&nbsp; ✉️ contack@gmail.com</div>
+        <div class="addr web">🌐 www.ai-jeju.re.kr</div>
       </div>
       <div class="ft-col">
         <h4>바로가기</h4>
@@ -977,8 +1010,8 @@
                 </select>
               </div>
               <div>
-                <label>날짜 (예: 2026.03)</label>
-                <input type="text" id="aDate" placeholder="2026.03" />
+                <label>날짜 (예: 2025-07-25)</label>
+                <input type="text" id="aDate" placeholder="2025-07-25" />
               </div>
             </div>
             <div class="af-row af-full">
@@ -986,8 +1019,30 @@
               <input type="text" id="aTitle" placeholder="논문 또는 보고서 제목" />
             </div>
             <div class="af-row af-full">
-              <label>저자 / 출처</label>
-              <input type="text" id="aAuthor" placeholder="예: 양인하 · KCI 등재지" />
+              <label>저자 / 기관 / 출처</label>
+              <input type="text" id="aAuthor" placeholder="예: 양인하 · Journal of ..." />
+            </div>
+            <div class="af-row af-full">
+              <label>구글드라이브 / 원문 링크 *</label>
+              <input type="url" id="aLink" placeholder="https://drive.google.com/... 또는 DOI/원문 링크" />
+            </div>
+            <div class="af-row af-full">
+              <label>짧은 요약 *</label>
+              <textarea id="aSummary" placeholder="자료실 목록에 바로 보일 2~3문장 요약"></textarea>
+            </div>
+            <div class="af-row af-full">
+              <label>상세 설명</label>
+              <textarea id="aDesc" placeholder="자료의 핵심 내용, 활용 포인트, 실무적 시사점 등을 적어주세요."></textarea>
+            </div>
+            <div class="af-row">
+              <div>
+                <label>출처 표기</label>
+                <input type="text" id="aSource" placeholder="예: DOI 10.xxxx/xxxx" />
+              </div>
+              <div>
+                <label>저작권 안내</label>
+                <input type="text" id="aCopyright" placeholder="예: 원문 권리는 해당 저작권자에게 있습니다." />
+              </div>
             </div>
             <button class="af-add-btn" onclick="addArch()">등록하기</button>
           </div>
@@ -1032,56 +1087,157 @@
   </div>
 </div>
 
+
+<div class="archive-modal-overlay" id="archiveModal">
+  <div class="archive-modal">
+    <div class="archive-modal-hd">
+      <div>
+        <h3 id="detailTitle">자료 상세</h3>
+      </div>
+      <button class="archive-modal-close" onclick="closeArchiveDetail()">✕</button>
+    </div>
+    <div class="archive-modal-body" id="archiveDetailBody"></div>
+  </div>
+</div>
+
 <button class="go-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <button class="admin-btn" onclick="openAdmin()" title="관리자">🔐</button>
 
 <script>
-  /* ── 비밀번호 (변경하려면 이 값을 수정) ── */
   const ADMIN_PW = '581558';
-
-  /* ── localStorage 키 ── */
   const ARCH_KEY = 'aijeju_archive';
   const NEWS_KEY = 'aijeju_news';
 
-  /* ── 유틸 ── */
-  function loadArch() { return JSON.parse(localStorage.getItem(ARCH_KEY) || '[]'); }
+  function loadArch() {
+    const raw = JSON.parse(localStorage.getItem(ARCH_KEY) || '[]');
+    return raw.map(item => ({
+      summary: '',
+      description: '',
+      link: '',
+      source: '',
+      copyright: '',
+      ...item
+    }));
+  }
   function saveArch(d) { localStorage.setItem(ARCH_KEY, JSON.stringify(d)); }
   function loadNews() { return JSON.parse(localStorage.getItem(NEWS_KEY) || '[]'); }
   function saveNews(d) { localStorage.setItem(NEWS_KEY, JSON.stringify(d)); }
 
-  /* ── 자료실 렌더 ── */
   const typeMap = {
     paper:  { cls:'t-pap', label:'논문' },
     report: { cls:'t-rep', label:'보고서' },
     policy: { cls:'t-pol', label:'정책' }
   };
+
+  function escapeHtml(v = '') {
+    return String(v)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function ensureHttps(url = '') {
+    const value = url.trim();
+    if (!value) return '';
+    if (/^https?:\/\//i.test(value)) return value;
+    return 'https://' + value;
+  }
+
   function renderArch() {
     const items = loadArch();
     const list = document.getElementById('arch-list');
-    const activeTab = document.querySelector('.atab.on')?.dataset.type || 'all';
-    const q = document.getElementById('archQ').value.toLowerCase();
+    const activeBtn = document.querySelector('.atab.on');
+    const activeTab = activeBtn?.dataset.type || 'all';
+    const q = document.getElementById('archQ').value.toLowerCase().trim();
+
     if (!items.length) {
-      list.innerHTML = '<div class="empty-msg">등록된 자료가 없습니다.<br>관리자 패널(🔐)에서 자료를 등록해 주세요.</div>';
+      list.innerHTML = '<div class="empty-msg">등록된 자료가 없습니다.<br>관리자 패널(🔐)에서 링크형 자료를 등록해 주세요.</div>';
       return;
     }
-    list.innerHTML = items.filter(it => {
+
+    const filtered = items.filter(it => {
       const matchType = activeTab === 'all' || it.type === activeTab;
-      const matchQ = !q || it.title.toLowerCase().includes(q) || (it.author||'').toLowerCase().includes(q);
+      const haystack = [it.title, it.author, it.summary, it.source].join(' ').toLowerCase();
+      const matchQ = !q || haystack.includes(q);
       return matchType && matchQ;
-    }).map((it, i) => {
+    });
+
+    list.innerHTML = filtered.map(it => {
+      const originalIndex = items.findIndex(row => row.id === it.id);
       const tm = typeMap[it.type] || typeMap.report;
-      return `<div class="arch-item" data-type="${it.type}">
-        <span class="atype ${tm.cls}">${tm.label}</span>
-        <div class="ainfo">
-          <h4>${it.title}</h4>
-          <span>${it.author || ''}${it.date ? ' · ' + it.date : ''}</span>
+      const summary = it.summary ? `<p class="summary">${escapeHtml(it.summary)}</p>` : '';
+      const linkBtn = it.link
+        ? `<a class="arch-link primary" href="${escapeHtml(ensureHttps(it.link))}" target="_blank" rel="noopener noreferrer">원문 보기</a>`
+        : '';
+      const detailBtn = `<button class="arch-btn" onclick="openArchiveDetail(${originalIndex})">상세 보기</button>`;
+      const shortNoteParts = [];
+      if (it.source) {
+        const sourceShort = it.source.split('DOI:')[0].trim().replace(/[·\s]+$/, '');
+        if (sourceShort) shortNoteParts.push(sourceShort);
+      }
+      if (/open access|cc by/i.test([it.source, it.copyright].filter(Boolean).join(' '))) {
+        shortNoteParts.push('Open Access');
+      }
+      const note = shortNoteParts.length
+        ? `<div class="arch-note">${escapeHtml(shortNoteParts.join(' · '))}</div>`
+        : '';
+
+      return `<div class="arch-item" data-type="${escapeHtml(it.type)}">
+        <div class="arch-top">
+          <span class="atype ${tm.cls}">${tm.label}</span>
+          <div class="ainfo">
+            <h4>${escapeHtml(it.title)}</h4>
+            <span class="meta">${escapeHtml(it.author || '')}${it.date ? ' · ' + escapeHtml(it.date) : ''}</span>
+            ${summary}
+          </div>
+          <div class="arch-admin-tools">
+            <button class="adl" onclick="delArch(${originalIndex})" title="삭제">🗑️</button>
+          </div>
         </div>
-        <button class="arch-item-del" onclick="delArch(${i})">삭제</button>
+        <div class="arch-actions">
+          ${detailBtn}
+          ${linkBtn}
+        </div>
+        ${note}
       </div>`;
     }).join('') || '<div class="empty-msg">검색 결과가 없습니다.</div>';
   }
 
-  /* ── 뉴스 렌더 ── */
+  function openArchiveDetail(index) {
+    const items = loadArch();
+    const item = items[index];
+    if (!item) return;
+
+    document.getElementById('detailTitle').textContent = item.title || '자료 상세';
+    const tm = typeMap[item.type] || typeMap.report;
+
+    const meta = [
+      tm.label,
+      item.author,
+      item.date,
+      item.source
+    ].filter(Boolean).map(v => `<span>${escapeHtml(v)}</span>`).join('');
+
+    const blocks = [
+      item.summary ? `<div class="detail-block"><h4>짧은 요약</h4><p>${escapeHtml(item.summary)}</p></div>` : '',
+      item.description ? `<div class="detail-block"><h4>상세 설명</h4><p>${escapeHtml(item.description)}</p></div>` : '',
+      item.copyright ? `<div class="detail-block"><h4>저작권 안내</h4><p>${escapeHtml(item.copyright)}</p></div>` : '',
+      item.link ? `<div class="detail-block"><h4>바로가기</h4><p><a class="arch-link primary" href="${escapeHtml(ensureHttps(item.link))}" target="_blank" rel="noopener noreferrer">구글드라이브 / 원문 링크 열기</a></p></div>` : ''
+    ].join('');
+
+    document.getElementById('archiveDetailBody').innerHTML = `
+      <div class="detail-meta">${meta}</div>
+      ${blocks || '<div class="detail-block"><p>등록된 상세 정보가 없습니다.</p></div>'}
+    `;
+    document.getElementById('archiveModal').classList.add('open');
+  }
+
+  function closeArchiveDetail() {
+    document.getElementById('archiveModal').classList.remove('open');
+  }
+
   const catEmoji = { '공지사항':'📢', '연구 성과':'🏆', '언론 보도':'📰', '행사/세미나':'🎤' };
   const catColor = { '공지사항':'th-navy', '연구 성과':'th-grad', '언론 보도':'th-teal', '행사/세미나':'th-navy' };
   function renderNews() {
@@ -1093,21 +1249,20 @@
     }
     grid.innerHTML = items.map((it, i) => {
       const emoji = catEmoji[it.cat] || '📋';
-      const col   = catColor[it.cat] || 'th-navy';
+      const col = catColor[it.cat] || 'th-navy';
       return `<div class="news-card">
         <button class="news-del" onclick="delNews(${i})">✕</button>
         <div class="news-thumb ${col}">${emoji}</div>
         <div class="news-body">
-          <div class="ncat">${it.cat}</div>
-          <h3>${it.title}</h3>
-          <p>${it.body || ''}</p>
-          <span class="ndate">${it.date || ''}</span>
+          <div class="ncat">${escapeHtml(it.cat)}</div>
+          <h3>${escapeHtml(it.title)}</h3>
+          <p>${escapeHtml(it.body || '')}</p>
+          <span class="ndate">${escapeHtml(it.date || '')}</span>
         </div>
       </div>`;
     }).join('');
   }
 
-  /* ── 관리자 패널 ── */
   function openAdmin() {
     document.getElementById('adminOverlay').classList.add('open');
     document.getElementById('pwInput').value = '';
@@ -1119,14 +1274,16 @@
   function closeAdmin() {
     document.getElementById('adminOverlay').classList.remove('open');
     document.body.classList.remove('admin-mode');
-    renderArch(); renderNews();
+    renderArch();
+    renderNews();
   }
   function checkPw() {
     if (document.getElementById('pwInput').value === ADMIN_PW) {
       document.getElementById('pwScreen').style.display = 'none';
       document.getElementById('adminScreen').style.display = 'block';
       document.body.classList.add('admin-mode');
-      renderAdminArch(); renderAdminNews();
+      renderAdminArch();
+      renderAdminNews();
     } else {
       document.getElementById('pwErr').style.display = 'block';
     }
@@ -1138,30 +1295,48 @@
     document.getElementById('admin' + (tab === 'arch' ? 'Arch' : 'News')).classList.add('on');
   }
 
-  /* ── 자료실 CRUD ── */
   function addArch() {
     const title = document.getElementById('aTitle').value.trim();
+    const link = ensureHttps(document.getElementById('aLink').value.trim());
+    const summary = document.getElementById('aSummary').value.trim();
+
     if (!title) { alert('제목을 입력해 주세요.'); return; }
+    if (!link) { alert('구글드라이브 또는 원문 링크를 입력해 주세요.'); return; }
+    if (!summary) { alert('짧은 요약을 입력해 주세요.'); return; }
+
     const items = loadArch();
     items.unshift({
-      type:   document.getElementById('aType').value,
+      type: document.getElementById('aType').value,
       title,
       author: document.getElementById('aAuthor').value.trim(),
-      date:   document.getElementById('aDate').value.trim(),
-      id:     Date.now()
+      date: document.getElementById('aDate').value.trim(),
+      link,
+      summary,
+      description: document.getElementById('aDesc').value.trim(),
+      source: document.getElementById('aSource').value.trim(),
+      copyright: document.getElementById('aCopyright').value.trim(),
+      id: Date.now()
     });
     saveArch(items);
-    document.getElementById('aTitle').value = '';
-    document.getElementById('aAuthor').value = '';
-    document.getElementById('aDate').value = '';
+
+    ['aTitle','aAuthor','aDate','aLink','aSummary','aDesc','aSource','aCopyright'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+
     renderAdminArch();
-    alert('✅ 자료가 등록되었습니다!');
+    renderArch();
+    alert('✅ 자료가 등록되었습니다.');
   }
+
   function delArch(i) {
     if (!confirm('이 자료를 삭제하시겠습니까?')) return;
-    const items = loadArch(); items.splice(i, 1); saveArch(items);
-    renderAdminArch(); renderArch();
+    const items = loadArch();
+    items.splice(i, 1);
+    saveArch(items);
+    renderAdminArch();
+    renderArch();
   }
+
   function renderAdminArch() {
     const items = loadArch();
     const el = document.getElementById('adminArchList');
@@ -1169,37 +1344,42 @@
     el.innerHTML = items.map((it, i) => `
       <div class="admin-item">
         <div class="admin-item-info">
-          <strong>${it.title}</strong>
-          <span>${typeMap[it.type]?.label || ''} · ${it.author || ''} · ${it.date || ''}</span>
+          <strong>${escapeHtml(it.title)}</strong>
+          <span>${escapeHtml(typeMap[it.type]?.label || '')} · ${escapeHtml(it.author || '')} · ${escapeHtml(it.date || '')}</span>
         </div>
         <button class="admin-del" onclick="delArch(${i})">삭제</button>
       </div>`).join('');
   }
 
-  /* ── 뉴스 CRUD ── */
   function addNews() {
     const title = document.getElementById('nTitle').value.trim();
     if (!title) { alert('제목을 입력해 주세요.'); return; }
     const items = loadNews();
     items.unshift({
-      cat:   document.getElementById('nCat').value,
+      cat: document.getElementById('nCat').value,
       title,
-      body:  document.getElementById('nBody').value.trim(),
-      date:  document.getElementById('nDate').value.trim(),
-      id:    Date.now()
+      body: document.getElementById('nBody').value.trim(),
+      date: document.getElementById('nDate').value.trim(),
+      id: Date.now()
     });
     saveNews(items);
     document.getElementById('nTitle').value = '';
     document.getElementById('nBody').value = '';
     document.getElementById('nDate').value = '';
     renderAdminNews();
+    renderNews();
     alert('✅ 뉴스/공지가 등록되었습니다!');
   }
+
   function delNews(i) {
     if (!confirm('이 뉴스를 삭제하시겠습니까?')) return;
-    const items = loadNews(); items.splice(i, 1); saveNews(items);
-    renderAdminNews(); renderNews();
+    const items = loadNews();
+    items.splice(i, 1);
+    saveNews(items);
+    renderAdminNews();
+    renderNews();
   }
+
   function renderAdminNews() {
     const items = loadNews();
     const el = document.getElementById('adminNewsList');
@@ -1207,14 +1387,13 @@
     el.innerHTML = items.map((it, i) => `
       <div class="admin-item">
         <div class="admin-item-info">
-          <strong>${it.title}</strong>
-          <span>${it.cat} · ${it.date || ''}</span>
+          <strong>${escapeHtml(it.title)}</strong>
+          <span>${escapeHtml(it.cat)} · ${escapeHtml(it.date || '')}</span>
         </div>
         <button class="admin-del" onclick="delNews(${i})">삭제</button>
       </div>`).join('');
   }
 
-  /* ── 자료실 필터/검색 ── */
   function filterArch(type, btn) {
     document.querySelectorAll('.atab').forEach(b => b.classList.remove('on'));
     btn.classList.add('on');
@@ -1223,13 +1402,14 @@
   }
   function searchArch() { renderArch(); }
   document.getElementById('archQ').addEventListener('keydown', e => { if (e.key === 'Enter') renderArch(); });
+  document.getElementById('archiveModal').addEventListener('click', (e) => {
+    if (e.target.id === 'archiveModal') closeArchiveDetail();
+  });
 
-  /* ── 자문 신청 ── */
   function submitForm() {
     alert('✅ 자문 신청이 접수되었습니다!\n담당자(김대훈 사무국장)가 2~3 영업일 내 연락드리겠습니다.\n📞 010-4931-1855 | ✉️ dahoo722@hanmail.net');
   }
 
-  /* ── Active nav highlight ── */
   const secs = document.querySelectorAll('section[id]');
   window.addEventListener('scroll', () => {
     let cur = '';
@@ -1239,7 +1419,6 @@
     });
   });
 
-  /* ── 초기 렌더 ── */
   renderArch();
   renderNews();
 </script>
