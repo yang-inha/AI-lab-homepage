@@ -446,6 +446,14 @@
     .admin-item-info span { font-size: 0.75rem; color: var(--gray-400); }
     .admin-del { background: #fee2e2; color: #dc2626; border: none; cursor: pointer; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; transition: background 0.2s; white-space: nowrap; }
     .admin-del:hover { background: #fca5a5; }
+    .admin-edit { background: #eff6ff; color: #2563eb; border: none; cursor: pointer; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; transition: background 0.2s; white-space: nowrap; margin-right: 0.4rem; }
+    .admin-edit:hover { background: #bfdbfe; }
+    .archive-editing-note { display: none; margin: 0 0 0.9rem; padding: 0.75rem 0.9rem; border-radius: 10px; background: #eff6ff; color: #1d4ed8; font-size: 0.82rem; font-weight: 700; }
+    .archive-editing-note.show { display: block; }
+    .archive-form-actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-top: 0.5rem; }
+    .af-cancel-btn { display: none; background: #fff; color: var(--gray-600); border: 1px solid var(--gray-200); cursor: pointer; padding: 0.65rem 1.2rem; border-radius: 8px; font-size: 0.88rem; font-weight: 700; font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s; }
+    .af-cancel-btn:hover { border-color: var(--gray-400); color: var(--gray-800); }
+    .af-cancel-btn.show { display: inline-flex; }
     .pw-panel { padding: 2rem; text-align: center; }
     .pw-panel h3 { font-family: 'Nanum Myeongjo', serif; color: var(--navy); margin-bottom: 0.5rem; }
     .pw-panel p { font-size: 0.83rem; color: var(--gray-600); margin-bottom: 1.2rem; }
@@ -1001,8 +1009,9 @@
 
  <!-- 자료실 관리 -->
  <div id="adminArch" class="admin-section on">
- <div class="admin-form">
- <h3>➕ 새 자료 등록</h3>
+ <div class="admin-form" id="archiveFormWrap">
+ <h3 id="archiveFormTitle">➕ 새 자료 등록</h3>
+ <div class="archive-editing-note" id="archiveEditingNote">수정 모드입니다. 내용을 고친 뒤 저장하세요.</div>
  <div class="af-row">
  <div>
  <label>분류</label>
@@ -1072,7 +1081,10 @@
  <input type="text" id="aCopyright" placeholder="예: 원문 권리는 해당 저작권자에게 있습니다." />
  </div>
  </div>
- <button class="af-add-btn" onclick="addArch()">등록하기</button>
+ <div class="archive-form-actions">
+ <button class="af-add-btn" id="archiveSubmitBtn" onclick="addArch()">등록하기</button>
+ <button class="af-cancel-btn" id="archiveCancelBtn" onclick="cancelArchEdit()">수정 취소</button>
+ </div>
  </div>
  <div class="admin-list-title">등록된 자료 목록</div>
  <div id="adminArchList"></div>
@@ -1153,6 +1165,7 @@
   let archiveItems = [];
   let archiveLoaded = false;
   let archiveLoadError = '';
+  let editingArchId = null;
 
   function loadNews() { return JSON.parse(localStorage.getItem(NEWS_KEY) || '[]'); }
   function saveNews(d) { localStorage.setItem(NEWS_KEY, JSON.stringify(d)); }
@@ -1316,6 +1329,7 @@
             ${summary}
           </div>
           <div class="arch-admin-tools">
+            <button class="adl" onclick="editArch('${escapeHtml(it.id)}')" title="수정">✏️</button>
             <button class="adl" onclick="delArch('${escapeHtml(it.id)}')" title="삭제">🗑️</button>
           </div>
         </div>
@@ -1468,14 +1482,62 @@
     }
   }
 
+  function setArchiveFormMode(editing = false) {
+    const titleEl = document.getElementById('archiveFormTitle');
+    const noteEl = document.getElementById('archiveEditingNote');
+    const submitEl = document.getElementById('archiveSubmitBtn');
+    const cancelEl = document.getElementById('archiveCancelBtn');
+    if (titleEl) titleEl.textContent = editing ? '✏️ 자료 수정' : '➕ 새 자료 등록';
+    if (noteEl) noteEl.classList.toggle('show', editing);
+    if (submitEl) submitEl.textContent = editing ? '수정 저장' : '등록하기';
+    if (cancelEl) cancelEl.classList.toggle('show', editing);
+  }
+
   function resetArchiveForm() {
     ['aTitle','aAuthor','aDate','aLink','aSummary','aDesc','aSource','aCopyright','aPolicyBackground','aExpectedFindings','aPolicyRecommendation','aExpectedEffect','aTargetAgency','aRelatedMaterials'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = '';
     });
+    editingArchId = null;
     const typeEl = document.getElementById('aType');
     if (typeEl) typeEl.value = 'paper';
     toggleArchiveFormByType();
+    setArchiveFormMode(false);
+  }
+
+  function fillArchiveForm(item) {
+    document.getElementById('aType').value = item.type || 'paper';
+    document.getElementById('aTitle').value = item.title || '';
+    document.getElementById('aAuthor').value = item.author || '';
+    document.getElementById('aDate').value = item.date || '';
+    document.getElementById('aLink').value = item.link || '';
+    document.getElementById('aSummary').value = item.summary || '';
+    document.getElementById('aDesc').value = item.description || '';
+    document.getElementById('aSource').value = item.source || '';
+    document.getElementById('aCopyright').value = item.copyright_note || item.copyright || '';
+    document.getElementById('aPolicyBackground').value = item.policy_background || '';
+    document.getElementById('aExpectedFindings').value = item.expected_findings || '';
+    document.getElementById('aPolicyRecommendation').value = item.policy_recommendation || '';
+    document.getElementById('aExpectedEffect').value = item.expected_effect || '';
+    document.getElementById('aTargetAgency').value = item.target_agency || '';
+    document.getElementById('aRelatedMaterials').value = item.related_materials || '';
+    toggleArchiveFormByType();
+  }
+
+  function editArch(id) {
+    const item = archiveItems.find(row => String(row.id) === String(id));
+    if (!item) {
+      alert('수정할 자료를 찾지 못했습니다.');
+      return;
+    }
+    editingArchId = id;
+    fillArchiveForm(item);
+    setArchiveFormMode(true);
+    document.getElementById('adminArch')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function cancelArchEdit() {
+    resetArchiveForm();
   }
 
   async function addArch() {
@@ -1486,6 +1548,7 @@
 
     const type = document.getElementById('aType').value;
     const isPolicy = type === 'policy';
+    const isEditing = !!editingArchId;
     const title = document.getElementById('aTitle').value.trim();
     const summary = document.getElementById('aSummary').value.trim();
     const link = ensureHttps(document.getElementById('aLink').value.trim());
@@ -1515,31 +1578,40 @@
     const payload = {
       type,
       title,
-      author: document.getElementById('aAuthor').value.trim(),
-      date: document.getElementById('aDate').value.trim(),
-      link: isPolicy ? '' : link,
+      author: document.getElementById('aAuthor').value.trim() || null,
+      date: document.getElementById('aDate').value.trim() || null,
+      link: isPolicy ? null : (link || null),
       summary,
-      description: document.getElementById('aDesc').value.trim(),
-      source: isPolicy ? '' : document.getElementById('aSource').value.trim(),
-      copyright_note: isPolicy ? '' : document.getElementById('aCopyright').value.trim(),
-      policy_background: isPolicy ? policyBackground : '',
-      expected_findings: isPolicy ? expectedFindings : '',
-      policy_recommendation: isPolicy ? policyRecommendation : '',
-      expected_effect: isPolicy ? expectedEffect : '',
-      target_agency: isPolicy ? targetAgency : '',
-      related_materials: isPolicy ? relatedMaterials : ''
+      description: document.getElementById('aDesc').value.trim() || null,
+      source: isPolicy ? null : (document.getElementById('aSource').value.trim() || null),
+      copyright_note: isPolicy ? null : (document.getElementById('aCopyright').value.trim() || null),
+      policy_background: isPolicy ? (policyBackground || null) : null,
+      expected_findings: isPolicy ? (expectedFindings || null) : null,
+      policy_recommendation: isPolicy ? (policyRecommendation || null) : null,
+      expected_effect: isPolicy ? (expectedEffect || null) : null,
+      target_agency: isPolicy ? (targetAgency || null) : null,
+      related_materials: isPolicy ? (relatedMaterials || null) : null
     };
 
-    const { error } = await sb.from('archive_items').insert([payload]);
+    let error = null;
+    if (isEditing) {
+      ({ error } = await sb.from('archive_items').update(payload).eq('id', editingArchId));
+    } else {
+      ({ error } = await sb.from('archive_items').insert([payload]));
+    }
+
     if (error) {
-      console.error('자료 등록 실패:', error);
-      alert('자료 등록에 실패했습니다. Supabase 설정을 확인해 주세요.');
+      console.error(isEditing ? '자료 수정 실패:' : '자료 등록 실패:', error);
+      alert(isEditing ? '자료 수정에 실패했습니다. Supabase 설정을 확인해 주세요.' : '자료 등록에 실패했습니다. Supabase 설정을 확인해 주세요.');
       return;
     }
 
+    const donePolicy = isPolicy;
+    const doneEditing = isEditing;
     resetArchiveForm();
     await fetchArchiveItems();
-    alert(isPolicy ? '✅ 정책 제언이 등록되었습니다.' : '✅ 자료가 등록되었습니다.');
+    alert(doneEditing ? (donePolicy ? '✅ 정책 제언이 수정되었습니다.' : '✅ 자료가 수정되었습니다.')
+                     : (donePolicy ? '✅ 정책 제언이 등록되었습니다.' : '✅ 자료가 등록되었습니다.'));
   }
 
   async function delArch(id) {
@@ -1580,7 +1652,10 @@
           <strong>${escapeHtml(it.title)}</strong>
           <span>${escapeHtml(typeMap[it.type]?.label || '')} · ${escapeHtml(it.author || '')} · ${escapeHtml(it.date || '')}</span>
         </div>
-        <button class="admin-del" onclick="delArch('${escapeHtml(it.id)}')">삭제</button>
+        <div>
+          <button class="admin-edit" onclick="editArch('${escapeHtml(it.id)}')">수정</button>
+          <button class="admin-del" onclick="delArch('${escapeHtml(it.id)}')">삭제</button>
+        </div>
       </div>`).join('');
   }
 
