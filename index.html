@@ -904,33 +904,37 @@
  <div class="divider"></div>
  </div>
  <div class="cform">
+ <form id="consultForm" action="https://script.google.com/macros/s/AKfycbyWYTwbbpqrERCxBoJAlvSXSOcK-zulL2HeZ1TuiTKjudNfkkj7w5GXb2rBwNuGdaF9Sw/exec" method="GET" target="consultHiddenFrame">
  <div class="frow">
- <div class="fgrp"><label for="consultOrg">기관/기업명 *</label><input id="consultOrg" type="text" placeholder="기관 또는 기업명" /></div>
- <div class="fgrp"><label for="consultName">담당자명 *</label><input id="consultName" type="text" placeholder="성명" /></div>
+ <div class="fgrp"><label for="consultOrg">기관/기업명 *</label><input id="consultOrg" name="organization" type="text" placeholder="기관 또는 기업명" required /></div>
+ <div class="fgrp"><label for="consultName">담당자명 *</label><input id="consultName" name="name" type="text" placeholder="성명" required /></div>
  </div>
  <div class="frow">
- <div class="fgrp"><label for="consultPhone">연락처 *</label><input id="consultPhone" type="tel" placeholder="010-0000-0000" /></div>
- <div class="fgrp"><label for="consultEmail">이메일</label><input id="consultEmail" type="email" placeholder="email@example.com" /></div>
+ <div class="fgrp"><label for="consultPhone">연락처 *</label><input id="consultPhone" name="phone" type="tel" placeholder="010-0000-0000" required /></div>
+ <div class="fgrp"><label for="consultEmail">이메일</label><input id="consultEmail" name="email" type="email" placeholder="email@example.com" /></div>
  </div>
  <div class="frow">
  <div class="fgrp fcol2">
  <label for="consultTopic">자문 분야 *</label>
- <select id="consultTopic">
+ <select id="consultTopic" name="topic" required>
  <option value="">-- 분야 선택 --</option>
- <option>AI / 빅데이터 분석 (NPI, 수요 예측 등)</option>
- <option>산업 안전 / 위험성 평가 (FlexBowTie, QRA)</option>
- <option>블록체인 / 보안 시스템</option>
- <option>공공정책 / 조직 진단 / 경영 전략</option>
- <option>지역 현안 / 정책 시뮬레이션</option>
- <option>기타</option>
+ <option value="AI / 빅데이터 분석 (NPI, 수요 예측 등)">AI / 빅데이터 분석 (NPI, 수요 예측 등)</option>
+ <option value="산업 안전 / 위험성 평가 (FlexBowTie, QRA)">산업 안전 / 위험성 평가 (FlexBowTie, QRA)</option>
+ <option value="블록체인 / 보안 시스템">블록체인 / 보안 시스템</option>
+ <option value="공공정책 / 조직 진단 / 경영 전략">공공정책 / 조직 진단 / 경영 전략</option>
+ <option value="지역 현안 / 정책 시뮬레이션">지역 현안 / 정책 시뮬레이션</option>
+ <option value="기타">기타</option>
  </select>
  </div>
  </div>
  <div class="frow">
- <div class="fgrp fcol2"><label for="consultMessage">자문 내용 *</label><textarea id="consultMessage" placeholder="자문 요청 내용을 간략히 기재해 주세요..."></textarea></div>
+ <div class="fgrp fcol2"><label for="consultMessage">자문 내용 *</label><textarea id="consultMessage" name="message" placeholder="자문 요청 내용을 간략히 기재해 주세요..." required></textarea></div>
  </div>
- <button id="consultSubmitBtn" class="fsub" onclick="submitForm(event)">자문 신청하기</button>
- <div id="consultStatus" class="field-help" style="margin-top:0.8rem;color:rgba(255,255,255,0.82);"></div>
+ <input type="hidden" name="source_page" value="https://jejuailab.com/#consult" />
+ <button id="consultSubmitBtn" class="fsub" type="submit">자문 신청하기</button>
+ <div id="consultStatus" class="field-help" style="margin-top:0.8rem;color:rgba(255,255,255,0.82);">제출 후 1~2초 뒤 관리자 시트에서 접수 여부를 확인해 주세요.</div>
+ </form>
+ <iframe name="consultHiddenFrame" title="consult submission" style="display:none;"></iframe>
  </div>
  </div>
  </div>
@@ -1715,76 +1719,8 @@
     if (e.target.id === 'archiveModal') closeArchiveDetail();
   });
 
-  const CONSULT_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyWYTwbbpqrERCxBoJAlvSXSOcK-zulL2HeZ1TuiTKjudNfkkj7w5GXb2rBwNuGdaF9Sw/exec';
-
-function submitForm(event) {
-  if (event) event.preventDefault();
-
-  const organization = document.getElementById('consultOrg')?.value.trim() || '';
-  const name = document.getElementById('consultName')?.value.trim() || '';
-  const phone = document.getElementById('consultPhone')?.value.trim() || '';
-  const email = document.getElementById('consultEmail')?.value.trim() || '';
-  const topic = document.getElementById('consultTopic')?.value.trim() || '';
-  const message = document.getElementById('consultMessage')?.value.trim() || '';
-  const statusEl = document.getElementById('consultStatus');
-  const submitBtn = document.getElementById('consultSubmitBtn');
-
-  if (!organization || !name || !phone || !topic || !message) {
-    alert('기관/기업명, 담당자명, 연락처, 자문 분야, 자문 내용은 필수입니다.');
-    return false;
-  }
-
-  if (statusEl) statusEl.textContent = '접수 중입니다...';
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = '0.7';
-  }
-
-  const params = new URLSearchParams({
-    organization,
-    name,
-    phone,
-    email,
-    topic,
-    message,
-    source_page: window.location.href,
-    _ts: String(Date.now())
-  });
-
-  const beacon = new Image();
-
-  beacon.onload = function () {
-    document.getElementById('consultOrg').value = '';
-    document.getElementById('consultName').value = '';
-    document.getElementById('consultPhone').value = '';
-    document.getElementById('consultEmail').value = '';
-    document.getElementById('consultTopic').value = '';
-    document.getElementById('consultMessage').value = '';
-
-    if (statusEl) {
-      statusEl.textContent = '✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.';
-    }
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = '1';
-    }
-    alert('✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.');
-  };
-
-  beacon.onerror = function () {
-    if (statusEl) {
-      statusEl.textContent = '전송 중 오류가 발생했습니다. 다시 시도해 주세요.';
-    }
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = '1';
-    }
-    alert('전송 중 오류가 발생했습니다. 다시 시도해 주세요.');
-  };
-
-  beacon.src = `${CONSULT_WEBAPP_URL}?${params.toString()}`;
-  return false;
-}
+  // 자문 신청은 브라우저 기본 GET form 제출 방식으로 처리합니다.
+  // Apps Script와의 연결 안정성을 위해 별도 자바스크립트 제출 로직은 사용하지 않습니다.
 
   const secs = document.querySelectorAll('section[id]');
   window.addEventListener('scroll', () => {
@@ -1793,7 +1729,7 @@ function submitForm(event) {
     document.querySelectorAll('nav a').forEach(a => {
       a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--cyan-light)' : '';
     });
-  });s
+  });
 
   (async function initSite() {
     renderNews();
