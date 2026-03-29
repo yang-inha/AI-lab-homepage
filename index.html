@@ -1734,80 +1734,55 @@ function submitForm(event) {
     return false;
   }
 
-  try {
-    if (statusEl) statusEl.textContent = '접수 중입니다...';
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = '0.7';
+  if (statusEl) statusEl.textContent = '접수 중입니다...';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.7';
+  }
+
+  const params = new URLSearchParams({
+    organization,
+    name,
+    phone,
+    email,
+    topic,
+    message,
+    source_page: window.location.href,
+    _ts: String(Date.now())
+  });
+
+  const beacon = new Image();
+
+  beacon.onload = function () {
+    document.getElementById('consultOrg').value = '';
+    document.getElementById('consultName').value = '';
+    document.getElementById('consultPhone').value = '';
+    document.getElementById('consultEmail').value = '';
+    document.getElementById('consultTopic').value = '';
+    document.getElementById('consultMessage').value = '';
+
+    if (statusEl) {
+      statusEl.textContent = '✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.';
     }
-
-    let iframe = document.getElementById('consultHiddenFrame');
-    if (!iframe) {
-      iframe = document.createElement('iframe');
-      iframe.name = 'consultHiddenFrame';
-      iframe.id = 'consultHiddenFrame';
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-    }
-
-    let form = document.getElementById('consultHiddenForm');
-    if (form) form.remove();
-
-    form = document.createElement('form');
-    form.id = 'consultHiddenForm';
-    form.method = 'GET';
-    form.action = CONSULT_WEBAPP_URL;
-    form.target = 'consultHiddenFrame';
-    form.style.display = 'none';
-
-    const fields = {
-      organization,
-      name,
-      phone,
-      email,
-      topic,
-      message,
-      source_page: window.location.href,
-      _ts: String(Date.now())
-    };
-
-    Object.entries(fields).forEach(([key, value]) => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = value;
-      form.appendChild(input);
-    });
-
-    document.body.appendChild(form);
-    form.submit();
-
-    window.setTimeout(() => {
-      document.getElementById('consultOrg').value = '';
-      document.getElementById('consultName').value = '';
-      document.getElementById('consultPhone').value = '';
-      document.getElementById('consultEmail').value = '';
-      document.getElementById('consultTopic').value = '';
-      document.getElementById('consultMessage').value = '';
-
-      if (statusEl) statusEl.textContent = '✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.';
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '1';
-      }
-      alert('✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.');
-    }, 1200);
-
-  } catch (err) {
-    console.error('자문 신청 저장 실패:', err);
-    if (statusEl) statusEl.textContent = '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
     if (submitBtn) {
       submitBtn.disabled = false;
       submitBtn.style.opacity = '1';
     }
-    alert('자문 신청 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-  }
+    alert('✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.');
+  };
 
+  beacon.onerror = function () {
+    if (statusEl) {
+      statusEl.textContent = '전송 중 오류가 발생했습니다. 다시 시도해 주세요.';
+    }
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    }
+    alert('전송 중 오류가 발생했습니다. 다시 시도해 주세요.');
+  };
+
+  beacon.src = `${CONSULT_WEBAPP_URL}?${params.toString()}`;
   return false;
 }
 
