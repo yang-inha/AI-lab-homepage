@@ -1751,19 +1751,12 @@
         submitBtn.style.opacity = '0.7';
       }
 
-      const res = await fetch(CONSULT_WEBAPP_URL, {
+      await fetch(CONSULT_WEBAPP_URL, {
         method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       });
-
-      const text = await res.text();
-      let json = {};
-      try { json = JSON.parse(text); } catch (_) {}
-
-      if (!res.ok || json.ok === false) {
-        throw new Error(json.error || '신청 저장에 실패했습니다.');
-      }
 
       document.getElementById('consultOrg').value = '';
       document.getElementById('consultName').value = '';
