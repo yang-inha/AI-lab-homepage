@@ -905,17 +905,17 @@
  </div>
  <div class="cform">
  <div class="frow">
- <div class="fgrp"><label>기관/기업명 *</label><input type="text" placeholder="기관 또는 기업명" /></div>
- <div class="fgrp"><label>담당자명 *</label><input type="text" placeholder="성명" /></div>
+ <div class="fgrp"><label for="consultOrg">기관/기업명 *</label><input id="consultOrg" type="text" placeholder="기관 또는 기업명" /></div>
+ <div class="fgrp"><label for="consultName">담당자명 *</label><input id="consultName" type="text" placeholder="성명" /></div>
  </div>
  <div class="frow">
- <div class="fgrp"><label>연락처 *</label><input type="tel" placeholder="010-0000-0000" /></div>
- <div class="fgrp"><label>이메일</label><input type="email" placeholder="email@example.com" /></div>
+ <div class="fgrp"><label for="consultPhone">연락처 *</label><input id="consultPhone" type="tel" placeholder="010-0000-0000" /></div>
+ <div class="fgrp"><label for="consultEmail">이메일</label><input id="consultEmail" type="email" placeholder="email@example.com" /></div>
  </div>
  <div class="frow">
  <div class="fgrp fcol2">
- <label>자문 분야 *</label>
- <select>
+ <label for="consultTopic">자문 분야 *</label>
+ <select id="consultTopic">
  <option value="">-- 분야 선택 --</option>
  <option>AI / 빅데이터 분석 (NPI, 수요 예측 등)</option>
  <option>산업 안전 / 위험성 평가 (FlexBowTie, QRA)</option>
@@ -927,9 +927,10 @@
  </div>
  </div>
  <div class="frow">
- <div class="fgrp fcol2"><label>자문 내용</label><textarea placeholder="자문 요청 내용을 간략히 기재해 주세요..."></textarea></div>
+ <div class="fgrp fcol2"><label for="consultMessage">자문 내용 *</label><textarea id="consultMessage" placeholder="자문 요청 내용을 간략히 기재해 주세요..."></textarea></div>
  </div>
- <button class="fsub" onclick="submitForm()">✉️ 자문 신청하기 — contack@gmail.com</button>
+ <button id="consultSubmitBtn" class="fsub" onclick="submitForm(event)">자문 신청하기</button>
+ <div id="consultStatus" class="field-help" style="margin-top:0.8rem;color:rgba(255,255,255,0.82);"></div>
  </div>
  </div>
  </div>
@@ -1714,10 +1715,75 @@
     if (e.target.id === 'archiveModal') closeArchiveDetail();
   });
 
-  function submitForm() {
-    alert(`✅ 자문 신청이 접수되었습니다!
-담당자(김대훈 사무국장)가 2~3 영업일 내 연락드리겠습니다.
-📞 010-4931-1855 | ✉️ dahoo722@hanmail.net`);
+  const CONSULT_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyWYTwbbpqrERCxBoJAlvSXSOcK-zulL2HeZ1TuiTKjudNfkkj7w5GXb2rBwNuGdaF9Sw/exec';
+
+  async function submitForm(event) {
+    if (event) event.preventDefault();
+
+    const organization = document.getElementById('consultOrg')?.value.trim() || '';
+    const name = document.getElementById('consultName')?.value.trim() || '';
+    const phone = document.getElementById('consultPhone')?.value.trim() || '';
+    const email = document.getElementById('consultEmail')?.value.trim() || '';
+    const topic = document.getElementById('consultTopic')?.value.trim() || '';
+    const message = document.getElementById('consultMessage')?.value.trim() || '';
+    const statusEl = document.getElementById('consultStatus');
+    const submitBtn = document.getElementById('consultSubmitBtn');
+
+    if (!organization || !name || !phone || !topic || !message) {
+      alert('기관/기업명, 담당자명, 연락처, 자문 분야, 자문 내용은 필수입니다.');
+      return;
+    }
+
+    const payload = {
+      name,
+      organization,
+      email,
+      phone,
+      topic,
+      message,
+      source_page: window.location.href
+    };
+
+    try {
+      if (statusEl) statusEl.textContent = '접수 중입니다...';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.7';
+      }
+
+      const res = await fetch(CONSULT_WEBAPP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+
+      const text = await res.text();
+      let json = {};
+      try { json = JSON.parse(text); } catch (_) {}
+
+      if (!res.ok || json.ok === false) {
+        throw new Error(json.error || '신청 저장에 실패했습니다.');
+      }
+
+      document.getElementById('consultOrg').value = '';
+      document.getElementById('consultName').value = '';
+      document.getElementById('consultPhone').value = '';
+      document.getElementById('consultEmail').value = '';
+      document.getElementById('consultTopic').value = '';
+      document.getElementById('consultMessage').value = '';
+
+      if (statusEl) statusEl.textContent = '✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.';
+      alert('✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.');
+    } catch (err) {
+      console.error('자문 신청 저장 실패:', err);
+      if (statusEl) statusEl.textContent = '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+      alert('자문 신청 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+      }
+    }
   }
 
   const secs = document.querySelectorAll('section[id]');
