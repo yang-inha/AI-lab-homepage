@@ -600,22 +600,101 @@
       color: #fff;
     }
 
-    .member-confirm-msg {
+    .member-success-modal-overlay {
       display: none;
-      max-width: 820px;
-      margin: 0 auto 1.2rem;
-      background: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      color: #065f46;
-      border-radius: 16px;
-      padding: 1rem 1.2rem;
-      font-size: 0.88rem;
-      font-weight: 600;
-      line-height: 1.7;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 2200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
     }
 
-    .member-confirm-msg.show {
-      display: block;
+    .member-success-modal-overlay.open {
+      display: flex;
+    }
+
+    .member-success-modal {
+      width: min(520px, 94vw);
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+      overflow: hidden;
+    }
+
+    .member-success-modal-hd {
+      background: linear-gradient(155deg, var(--navy-dark), var(--navy));
+      color: #fff;
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .member-success-modal-hd h3 {
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .member-success-modal-close {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.82);
+      cursor: pointer;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .member-success-modal-close:hover {
+      color: #fff;
+    }
+
+    .member-success-modal-body {
+      padding: 1.4rem;
+    }
+
+    .member-success-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      border-radius: 999px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.76rem;
+      font-weight: 700;
+      margin-bottom: 0.9rem;
+    }
+
+    .member-success-modal-body p {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .member-success-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .member-success-ok-btn {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .member-success-ok-btn:hover {
+      background: var(--navy-mid);
     }
 
     .member-form-wrap {
@@ -1328,6 +1407,22 @@
  </div>
  </div>
 </section>
+
+<div class="member-success-modal-overlay" id="memberSuccessModal" onclick="handleMemberSuccessOverlay(event)">
+ <div class="member-success-modal">
+  <div class="member-success-modal-hd">
+   <h3>접수 완료</h3>
+   <button class="member-success-modal-close" type="button" onclick="closeMembershipSuccessModal()">✕</button>
+  </div>
+  <div class="member-success-modal-body">
+   <div class="member-success-badge">✅ 회원 신청 완료</div>
+   <p>회원 및 협력 신청이 정상적으로 접수되었습니다.<br />내용 검토 후 순차적으로 안내드리겠습니다.</p>
+   <div class="member-success-modal-actions">
+    <button type="button" class="member-success-ok-btn" onclick="closeMembershipSuccessModal()">확인</button>
+   </div>
+  </div>
+ </div>
+</div>
 
 <!-- CONSULT -->
 <section id="consult">
@@ -2217,13 +2312,8 @@ let membershipSubmitting = false;
 
 function openMembershipForm() {
   const formSection = document.getElementById('membership-form');
-  const confirmMsg = document.getElementById('membershipConfirmMsg');
   if (formSection) {
     formSection.classList.add('show');
-  }
-  if (confirmMsg) {
-    confirmMsg.classList.remove('show');
-    confirmMsg.textContent = '';
   }
 }
 
@@ -2231,6 +2321,30 @@ function closeMembershipForm() {
   const formSection = document.getElementById('membership-form');
   if (formSection) {
     formSection.classList.remove('show');
+  }
+}
+
+function openMembershipSuccessModal() {
+  const modal = document.getElementById('memberSuccessModal');
+  if (modal) {
+    modal.classList.add('open');
+  }
+}
+
+function closeMembershipSuccessModal() {
+  const modal = document.getElementById('memberSuccessModal');
+  if (modal) {
+    modal.classList.remove('open');
+  }
+  const membershipSection = document.getElementById('membership');
+  if (membershipSection) {
+    membershipSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function handleMemberSuccessOverlay(event) {
+  if (event.target && event.target.id === 'memberSuccessModal') {
+    closeMembershipSuccessModal();
   }
 }
 
@@ -2303,12 +2417,7 @@ window.addEventListener('DOMContentLoaded', function () {
       toggleMemberTypeFields();
       closeMembershipForm();
 
-      const membershipConfirmMsg = document.getElementById('membershipConfirmMsg');
-      if (membershipConfirmMsg) {
-        membershipConfirmMsg.textContent = '✅ 회원 및 협력 신청이 접수되었습니다. 내용을 검토한 후 순차적으로 안내드리겠습니다.';
-        membershipConfirmMsg.classList.add('show');
-        membershipConfirmMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      openMembershipSuccessModal();
 
       if (membershipStatusEl) {
         membershipStatusEl.textContent = '신청 유형과 필수 항목을 입력한 뒤 회원 신청하기 버튼을 눌러 주세요.';
