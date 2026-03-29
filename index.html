@@ -1717,89 +1717,65 @@
 
   const CONSULT_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbyWYTwbbpqrERCxBoJAlvSXSOcK-zulL2HeZ1TuiTKjudNfkkj7w5GXb2rBwNuGdaF9Sw/exec';
 
-  async function submitForm(event) {
-    if (event) event.preventDefault();
+async function submitForm(event) {
+  if (event) event.preventDefault();
 
-    const organization = document.getElementById('consultOrg')?.value.trim() || '';
-    const name = document.getElementById('consultName')?.value.trim() || '';
-    const phone = document.getElementById('consultPhone')?.value.trim() || '';
-    const email = document.getElementById('consultEmail')?.value.trim() || '';
-    const topic = document.getElementById('consultTopic')?.value.trim() || '';
-    const message = document.getElementById('consultMessage')?.value.trim() || '';
-    const statusEl = document.getElementById('consultStatus');
-    const submitBtn = document.getElementById('consultSubmitBtn');
+  const organization = document.getElementById('consultOrg')?.value.trim() || '';
+  const name = document.getElementById('consultName')?.value.trim() || '';
+  const phone = document.getElementById('consultPhone')?.value.trim() || '';
+  const email = document.getElementById('consultEmail')?.value.trim() || '';
+  const topic = document.getElementById('consultTopic')?.value.trim() || '';
+  const message = document.getElementById('consultMessage')?.value.trim() || '';
+  const statusEl = document.getElementById('consultStatus');
+  const submitBtn = document.getElementById('consultSubmitBtn');
 
-    if (!organization || !name || !phone || !topic || !message) {
-      alert('기관/기업명, 담당자명, 연락처, 자문 분야, 자문 내용은 필수입니다.');
-      return;
+  if (!organization || !name || !phone || !topic || !message) {
+    alert('기관/기업명, 담당자명, 연락처, 자문 분야, 자문 내용은 필수입니다.');
+    return;
+  }
+
+  try {
+    if (statusEl) statusEl.textContent = '접수 중입니다...';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.7';
     }
 
-    try {
-      if (statusEl) statusEl.textContent = '접수 중입니다...';
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.7';
-      }
+    const params = new URLSearchParams({
+      organization,
+      name,
+      phone,
+      email,
+      topic,
+      message,
+      source_page: window.location.href
+    });
 
-      let iframe = document.getElementById('consultSubmitFrame');
-      if (!iframe) {
-        iframe = document.createElement('iframe');
-        iframe.name = 'consultSubmitFrame';
-        iframe.id = 'consultSubmitFrame';
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-      }
+    await fetch(`${CONSULT_WEBAPP_URL}?${params.toString()}`, {
+      method: 'GET',
+      mode: 'no-cors'
+    });
 
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = CONSULT_WEBAPP_URL;
-      form.target = 'consultSubmitFrame';
-      form.style.display = 'none';
+    document.getElementById('consultOrg').value = '';
+    document.getElementById('consultName').value = '';
+    document.getElementById('consultPhone').value = '';
+    document.getElementById('consultEmail').value = '';
+    document.getElementById('consultTopic').value = '';
+    document.getElementById('consultMessage').value = '';
 
-      const fields = {
-        organization,
-        name,
-        phone,
-        email,
-        topic,
-        message,
-        source_page: window.location.href
-      };
-
-      Object.entries(fields).forEach(([key, value]) => {
-        const input = document.createElement('textarea');
-        input.name = key;
-        input.value = value || '';
-        form.appendChild(input);
-      });
-
-      document.body.appendChild(form);
-      form.submit();
-
-      setTimeout(() => {
-        form.remove();
-      }, 500);
-
-      document.getElementById('consultOrg').value = '';
-      document.getElementById('consultName').value = '';
-      document.getElementById('consultPhone').value = '';
-      document.getElementById('consultEmail').value = '';
-      document.getElementById('consultTopic').value = '';
-      document.getElementById('consultMessage').value = '';
-
-      if (statusEl) statusEl.textContent = '✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.';
-      alert('✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.');
-    } catch (err) {
-      console.error('자문 신청 저장 실패:', err);
-      if (statusEl) statusEl.textContent = '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
-      alert('자문 신청 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
-    } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '1';
-      }
+    if (statusEl) statusEl.textContent = '✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.';
+    alert('✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.');
+  } catch (err) {
+    console.error('자문 신청 저장 실패:', err);
+    if (statusEl) statusEl.textContent = '접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+    alert('자문 신청 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
     }
   }
+}
 
   const secs = document.querySelectorAll('section[id]');
   window.addEventListener('scroll', () => {
