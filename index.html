@@ -677,7 +677,7 @@
  <span class="m-badge" style="background:#2d5a27;">대외협력·재무</span>
  <div class="m-name">홍승범</div>
  <div class="m-field">대외협력·재무 · 이사</div>
- <div class="m-univ">&nbsp;</div>
+ <div class="m-univ"> </div>
  <div class="m-desc">연구소 설립 초기<br>재정 지원 및 기반 마련<br>대외협력 총괄</div>
  </div>
  </div>
@@ -762,7 +762,7 @@
 <section id="rnd">
  <div class="inner">
  <div class="sec-hd">
- <div class="sec-tag">R&amp;D Track Record</div>
+ <div class="sec-tag">R&D Track Record</div>
  <h2 class="sec-title">주요 연구 및 기술 개발 실적</h2>
  <p class="sec-desc">법인 설립 이전부터 쌓아온 검증된 연구 성과</p>
  <div class="divider"></div>
@@ -884,8 +884,8 @@
 <section id="news">
  <div class="inner">
  <div class="sec-hd">
- <div class="sec-tag">News &amp; Notice</div>
- <h2 class="sec-title">뉴스 &amp; 공지</h2>
+ <div class="sec-tag">News & Notice</div>
+ <h2 class="sec-title">뉴스 & 공지</h2>
  <p class="sec-desc">연구소 소식 및 언론 보도</p>
  <div class="divider"></div>
  </div>
@@ -944,7 +944,7 @@
  <div class="fn">사단법인 AI융합연구소</div>
  <p>기술(Tech)과 인문사회학(Context)의 진정한 결합으로<br>실사구시형 AI 연구를 추구합니다.<br>데이터 기반 의사결정 문화 정착과 지역 혁신 생태계 조성에 기여합니다.</p>
  <div class="addr">📍 제주특별자치도 제주시 이도일동 1289-18, 307호</div>
- <div class="addr">📞 010-4931-1855 &nbsp;|&nbsp; ✉️ yangih71@gmail.com</div>
+ <div class="addr">📞 010-4931-1855  |  ✉️ yangih71@gmail.com</div>
  <div class="addr web">🌐 www.jejuailab.com</div>
  </div>
  <div class="ft-col">
@@ -955,7 +955,7 @@
  <li><a href="#rnd">연구 실적</a></li>
  <li><a href="#roadmap">성장 로드맵</a></li>
  <li><a href="#archive">자료실</a></li>
- <li><a href="#news">뉴스 &amp; 공지</a></li>
+ <li><a href="#news">뉴스 & 공지</a></li>
  <li><a href="#consult">자문 신청</a></li>
  </ul>
  </div>
@@ -1179,11 +1179,11 @@
 
   function escapeHtml(v = '') {
     return String(v)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+      .replace(/&/g, '&')
+      .replace(/</g, '<')
+      .replace(/>/g, '>')
+      .replace(/"/g, '"')
+      .replace(/'/g, ''');
   }
 
   function ensureHttps(url = '') {
@@ -1734,16 +1734,6 @@
       return;
     }
 
-    const payload = {
-      name,
-      organization,
-      email,
-      phone,
-      topic,
-      message,
-      source_page: window.location.href
-    };
-
     try {
       if (statusEl) statusEl.textContent = '접수 중입니다...';
       if (submitBtn) {
@@ -1751,12 +1741,44 @@
         submitBtn.style.opacity = '0.7';
       }
 
-      await fetch(CONSULT_WEBAPP_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload)
+      let iframe = document.getElementById('consultSubmitFrame');
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.name = 'consultSubmitFrame';
+        iframe.id = 'consultSubmitFrame';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+      }
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = CONSULT_WEBAPP_URL;
+      form.target = 'consultSubmitFrame';
+      form.style.display = 'none';
+
+      const fields = {
+        organization,
+        name,
+        phone,
+        email,
+        topic,
+        message,
+        source_page: window.location.href
+      };
+
+      Object.entries(fields).forEach(([key, value]) => {
+        const input = document.createElement('textarea');
+        input.name = key;
+        input.value = value || '';
+        form.appendChild(input);
       });
+
+      document.body.appendChild(form);
+      form.submit();
+
+      setTimeout(() => {
+        form.remove();
+      }, 500);
 
       document.getElementById('consultOrg').value = '';
       document.getElementById('consultName').value = '';
