@@ -1588,8 +1588,8 @@
  <textarea id="aPolicyBackground" placeholder="이 정책 제언이 왜 필요한지, 어떤 문제를 다루는지 적어주세요."></textarea>
  </div>
  <div class="af-row af-full policy-only" id="expectedFindingsWrap">
- <label>예상 핵심발견 *</label>
- <textarea id="aExpectedFindings" placeholder="초안 또는 아이디어 단계에서 예상되는 핵심 발견을 정리해 주세요."></textarea>
+ <label>예비분석에서 포착된 신호 *</label>
+ <textarea id="aExpectedFindings" placeholder="예비 분석 단계에서 포착된 주요 신호나 시사점을 정리해 주세요."></textarea>
  </div>
  <div class="af-row af-full policy-only" id="policyRecommendationWrap">
  <label>핵심 제언 *</label>
@@ -1906,8 +1906,9 @@
 
     if (isPolicy) {
       if (item.policy_background) blocks += `<div class="detail-block"><h4>정책 배경</h4><p>${escapeHtml(item.policy_background)}</p></div>`;
-      if (item.expected_findings) blocks += `<div class="detail-block"><h4>예상 핵심발견</h4><p>${escapeHtml(item.expected_findings)}</p></div>`;
+      if (item.expected_findings) blocks += `<div class="detail-block"><h4>예비분석에서 포착된 신호</h4><p>${escapeHtml(item.expected_findings)}</p></div>`;
       if (item.policy_recommendation) blocks += `<div class="detail-block"><h4>핵심 제언</h4><p>${escapeHtml(item.policy_recommendation)}</p></div>`;
+      blocks += `<div class="detail-block"><h4>연구제안</h4><p>본 연구소는 예비 분석에서 포착된 신호를 검증하기 위한 심층분석 연구를 수행할 준비가 되어 있으며, 관련 연구 용역 및 협력에 대한 문의를 환영합니다.</p><p style="margin-top:0.8rem;"><a class="arch-link primary" href="#consult" onclick="closeArchiveDetail(); setTimeout(function(){ document.getElementById('consult')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 120); return false;">자문 신청으로 이동</a></p></div>`;
       if (item.expected_effect) blocks += `<div class="detail-block"><h4>기대 효과</h4><p>${escapeHtml(item.expected_effect)}</p></div>`;
       if (item.target_agency) blocks += `<div class="detail-block"><h4>대상 기관</h4><p>${escapeHtml(item.target_agency)}</p></div>`;
       if (item.related_materials) blocks += `<div class="detail-block"><h4>관련 자료</h4><p>${escapeHtml(item.related_materials)}</p></div>`;
