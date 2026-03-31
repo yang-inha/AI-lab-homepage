@@ -408,6 +408,36 @@
     .ft-col li:hover { color: var(--cyan-light); }
     .ft-bot { display: flex; justify-content: space-between; font-size: 0.76rem; flex-wrap: wrap; gap: 0.4rem; }
 
+    /* ── NO-LINK POPUP ── */
+    .nolink-popup-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 3000;
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    .nolink-popup-overlay.open { display: flex; }
+    .nolink-popup {
+      background: #fff; border-radius: 20px; padding: 2.5rem 2rem 2rem;
+      text-align: center; max-width: 420px; width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      animation: popIn 0.25s ease;
+    }
+    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .nolink-popup-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .nolink-popup-msg {
+      font-size: 0.95rem; color: var(--gray-800); font-weight: 600;
+      line-height: 1.75; margin-bottom: 0.8rem;
+    }
+    .nolink-popup-sub {
+      font-size: 0.84rem; color: var(--gray-600); line-height: 1.7; margin-bottom: 1.5rem;
+    }
+    .nolink-popup-btn {
+      background: var(--navy); color: #fff; border: none; cursor: pointer;
+      padding: 0.7rem 2.2rem; border-radius: 8px; font-size: 0.9rem;
+      font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+      transition: background 0.2s;
+    }
+    .nolink-popup-btn:hover { background: var(--navy-mid); }
+
     /* ── SCROLL TOP ── */
     .go-top { position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px; background: var(--navy); border: 2px solid var(--cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: #fff; cursor: pointer; transition: all 0.25s; z-index: 999; opacity: 0.82; }
     .go-top:hover { background: var(--cyan); opacity: 1; transform: translateY(-3px); }
@@ -937,7 +967,7 @@
  </div>
  <div class="contact-info">
  <div class="contact-row">📍 <strong>주소</strong> 제주특별자치도 제주시 이도일동 1289-18, 307호</div>
- <div class="contact-row">✉️ <strong>이메일</strong> yangih71@gmail.com</div>
+ <div class="contact-row">✉️ <strong>이메일</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="087169666f61603f39486f65696164266b6765">[email&#160;protected]</a></div>
  <div class="contact-row">🌐 <strong>홈페이지</strong> <span class="web">www.jejuailab.com</span></div>
  <div class="contact-row">👤 <strong>담당자</strong> 김대훈 이사 · 010-4931-1855</div>
  <a href="https://map.kakao.com" target="_blank" class="map-btn">🗺️ 카카오맵으로 보기</a>
@@ -1483,7 +1513,7 @@
  <div class="fn">사단법인 AI융합연구소</div>
  <p>기술(Tech)과 인문사회학(Context)의 진정한 결합으로<br>실사구시형 AI 연구를 추구합니다.<br>데이터 기반 의사결정 문화 정착과 지역 혁신 생태계 조성에 기여합니다.</p>
  <div class="addr">📍 제주특별자치도 제주시 이도일동 1289-18, 307호</div>
- <div class="addr">📞 010-4931-1855  |  ✉️ yangih71@gmail.com</div>
+ <div class="addr">📞 010-4931-1855  |  ✉️ <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="81f8e0efe6e8e9b6b0c1e6ece0e8edafe2eeec">[email&#160;protected]</a></div>
  <div class="addr web">🌐 www.jejuailab.com</div>
  </div>
  <div class="ft-col">
@@ -1680,10 +1710,20 @@
  </div>
 </div>
 
+<!-- 원문 미제공 안내 팝업 -->
+<div class="nolink-popup-overlay" id="noLinkPopup" onclick="if(event.target===this)closeNoLinkPopup()">
+  <div class="nolink-popup">
+    <div class="nolink-popup-icon">📄</div>
+    <p class="nolink-popup-msg">이 자료는 저작권 또는 제공 조건에 따라<br>원문 파일을 직접 제공하지 않습니다.</p>
+    <p class="nolink-popup-sub">필요한 경우 출처 정보를 참고하시거나<br>연구소로 문의해 주세요.</p>
+    <button class="nolink-popup-btn" onclick="closeNoLinkPopup()">확인</button>
+  </div>
+</div>
+
 <button class="go-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <button class="admin-btn" onclick="openAdmin()" title="관리자">🔐</button>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const ADMIN_PW = '581558';
   const NEWS_KEY = 'aijeju_news';
@@ -1841,8 +1881,10 @@
       const tm = typeMap[it.type] || typeMap.report;
       const summary = it.summary ? `<p class="summary">${escapeHtml(it.summary)}</p>` : '';
       const isPolicy = it.type === 'policy';
-      const linkBtn = (!isPolicy && it.link)
-        ? `<a class="arch-link primary" href="${escapeHtml(ensureHttps(it.link))}" target="_blank" rel="noopener noreferrer">원문 보기</a>`
+      const linkBtn = !isPolicy
+        ? (it.link
+          ? `<a class="arch-link primary" href="${escapeHtml(ensureHttps(it.link))}" target="_blank" rel="noopener noreferrer">원문 보기</a>`
+          : `<button class="arch-link primary" onclick="showNoLinkPopup()" style="border:none;cursor:pointer;font-family:inherit;">원문 보기</button>`)
         : '';
       const detailBtn = `<button class="arch-btn" onclick="openArchiveDetail('${escapeHtml(it.id)}')">상세 보기</button>`;
       const shortNoteParts = [];
@@ -1916,7 +1958,11 @@
     } else {
       if (item.description) blocks += `<div class="detail-block"><h4>상세 설명</h4><p>${escapeHtml(item.description)}</p></div>`;
       if (copyrightText) blocks += `<div class="detail-block"><h4>저작권 안내</h4><p>${escapeHtml(copyrightText)}</p></div>`;
-      if (item.link) blocks += `<div class="detail-block"><h4>바로가기</h4><p><a class="arch-link primary" href="${escapeHtml(ensureHttps(item.link))}" target="_blank" rel="noopener noreferrer">구글드라이브 / 원문 링크 열기</a></p></div>`;
+      if (item.link) {
+        blocks += `<div class="detail-block"><h4>바로가기</h4><p><a class="arch-link primary" href="${escapeHtml(ensureHttps(item.link))}" target="_blank" rel="noopener noreferrer">구글드라이브 / 원문 링크 열기</a></p></div>`;
+      } else {
+        blocks += `<div class="detail-block"><h4>바로가기</h4><p><button class="arch-link primary" onclick="showNoLinkPopup()" style="border:none;cursor:pointer;font-family:inherit;">원문 보기</button></p></div>`;
+      }
     }
 
     document.getElementById('archiveDetailBody').innerHTML = `
@@ -1928,6 +1974,13 @@
 
   function closeArchiveDetail() {
     document.getElementById('archiveModal').classList.remove('open');
+  }
+
+  function showNoLinkPopup() {
+    document.getElementById('noLinkPopup').classList.add('open');
+  }
+  function closeNoLinkPopup() {
+    document.getElementById('noLinkPopup').classList.remove('open');
   }
 
   const catEmoji = { '공지사항':'📢', '연구 성과':'🏆', '언론 보도':'📰', '행사/세미나':'🎤' };
@@ -2438,18 +2491,4 @@ window.addEventListener('DOMContentLoaded', function () {
     if (!consultSubmitting) return;
     consultSubmitting = false;
 
-    form.reset();
-
-    if (statusEl) {
-      statusEl.textContent = '✅ 자문 신청이 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.';
-    }
-    if (submitBtn) {
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = '1';
-      submitBtn.textContent = '자문 신청하기';
-    }
-  });
-});
-</script>
-</body>
-</html>
+    form
