@@ -2150,11 +2150,6 @@
     if (!title) { alert('제목을 입력해 주세요.'); return; }
     if (!summary) { alert('짧은 요약을 입력해 주세요.'); return; }
 
-    if (!isPolicy && !link) {
-      alert('학술논문 또는 연구보고서는 구글드라이브 또는 원문 링크를 입력해 주세요.');
-      return;
-    }
-
     const policyBackground = document.getElementById('aPolicyBackground').value.trim();
     const expectedFindings = document.getElementById('aExpectedFindings').value.trim();
     const policyRecommendation = document.getElementById('aPolicyRecommendation').value.trim();
