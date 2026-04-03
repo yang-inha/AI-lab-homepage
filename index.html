@@ -2486,4 +2486,19 @@ window.addEventListener('DOMContentLoaded', function () {
     if (!consultSubmitting) return;
     consultSubmitting = false;
 
-    form
+    form.reset();
+
+    if (statusEl) {
+      statusEl.textContent = '✅ 자문 신청이 정상적으로 접수되었습니다. 검토 후 연락드리겠습니다.';
+      statusEl.style.color = '#008B8B';
+    }
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      submitBtn.textContent = '자문 신청하기';
+    }
+  });
+});
+</script>
+</body>
+</html>
