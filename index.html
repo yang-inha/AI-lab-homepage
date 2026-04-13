@@ -405,6 +405,23 @@
       color: var(--cyan-light); padding: 0.3rem 0.9rem; border-radius: 16px;
       font-size: 0.72rem; letter-spacing: 0.06em; margin-bottom: 1rem;
     }
+    /* 아코디언 (과거호) */
+    .nl-accordion { margin-bottom: 1rem; border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden; }
+    .nl-acc-toggle {
+      width: 100%; background: var(--gray-50); border: none; cursor: pointer;
+      padding: 1rem 1.4rem; display: flex; align-items: center; justify-content: space-between;
+      font-family: 'Noto Sans KR', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--navy);
+      transition: background 0.2s;
+    }
+    .nl-acc-toggle:hover { background: var(--cyan-pale); }
+    .nl-acc-toggle .nl-acc-arrow { transition: transform 0.3s; font-size: 0.8rem; color: var(--gray-400); }
+    .nl-acc-toggle.open .nl-acc-arrow { transform: rotate(180deg); }
+    .nl-acc-body { display: none; padding: 0 1.4rem 1.4rem; }
+    .nl-acc-body.open { display: block; }
+    .nl-issue-label {
+      display: inline-block; background: var(--navy); color: #fff; font-size: 0.68rem;
+      font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 10px; margin-right: 0.5rem;
+    }
 
     /* ── CONSULT ── */
     #consult { background: linear-gradient(155deg, var(--navy-dark), var(--navy)); }
@@ -1702,7 +1719,23 @@
  <!-- 뉴스레터 관리 -->
  <div id="adminNews" class="admin-section">
  <div class="admin-form">
- <h3>📋 뉴스레터 발행 정보</h3>
+ <h3>📋 뉴스레터 호수 관리</h3>
+ <div class="af-row">
+ <div>
+ <label>편집할 호 선택</label>
+ <select id="nlIssueSelect" onchange="onIssueSelect()">
+ </select>
+ </div>
+ <div>
+ <label>&nbsp;</label>
+ <button class="af-add-btn" onclick="createNewIssue()" style="margin-top:0;">➕ 새 호 발행</button>
+ </div>
+ </div>
+ </div>
+
+ <div id="nlEditorArea" style="display:none;">
+ <div class="admin-form" style="margin-top:1rem;">
+ <h3>📝 발행 정보</h3>
  <div class="af-row">
  <div>
  <label>발행일 (예: 2026-04-13)</label>
@@ -1721,7 +1754,8 @@
  </div>
 
  <div class="admin-form" style="margin-top:1rem;">
- <h3>➕ 주요 뉴스 등록</h3>
+ <h3 id="nlArticleFormTitle">➕ 주요 뉴스 등록</h3>
+ <div class="archive-editing-note" id="nlEditingNote">수정 모드입니다. 내용을 고친 뒤 저장하세요.</div>
  <div class="af-row af-full">
  <label>제목 *</label>
  <input type="text" id="nlTitle" placeholder="뉴스 제목" />
@@ -1748,7 +1782,10 @@
  <label>연구소 시각</label>
  <textarea id="nlInsight" placeholder="이 뉴스에 대한 AI융합연구소의 관점을 1~2문장으로"></textarea>
  </div>
- <button class="af-add-btn" onclick="addNlArticle()">뉴스 추가</button>
+ <div class="archive-form-actions">
+ <button class="af-add-btn" id="nlArticleSubmitBtn" onclick="addOrUpdateNlArticle()">뉴스 추가</button>
+ <button class="af-cancel-btn" id="nlArticleCancelBtn" onclick="cancelNlArticleEdit()">수정 취소</button>
+ </div>
  </div>
 
  <div class="admin-form" style="margin-top:1rem;">
@@ -1762,6 +1799,11 @@
 
  <div class="admin-list-title" style="margin-top:1.5rem;">등록된 뉴스 목록</div>
  <div id="adminNewsList"></div>
+
+ <div style="margin-top:1.5rem; text-align:right;">
+ <button class="admin-del" style="display:inline-block;cursor:pointer;padding:0.5rem 1.2rem;border-radius:8px;font-size:0.82rem;" onclick="deleteCurrentIssue()">🗑️ 이 호 삭제</button>
+ </div>
+ </div>
  </div>
  </div>
  </div>
@@ -1818,14 +1860,48 @@
   let archiveLoadError = '';
   let editingArchId = null;
 
-  // 뉴스레터 데이터 구조
-  function loadNl() {
-    return JSON.parse(localStorage.getItem(NL_KEY) || JSON.stringify({
-      date: '', publisher: '사단법인 AI융합연구소', summary: '',
-      articles: [], editorial: ''
-    }));
+  // ── 뉴스레터: Supabase 연동 ──
+  let nlIssues = []; // 메모리 캐시 (issue 내림차순)
+  let currentIssueIdx = -1;
+  let editingArticleIdx = -1;
+
+  async function fetchNlIssues() {
+    if (!sb) { nlIssues = []; return; }
+    const { data, error } = await sb
+      .from('newsletter_issues')
+      .select('*')
+      .order('issue', { ascending: false });
+    if (error) { console.error('뉴스레터 로드 오류:', error); nlIssues = []; return; }
+    nlIssues = (data || []).map(function(row) {
+      var arts = [];
+      try { arts = typeof row.articles === 'string' ? JSON.parse(row.articles) : (row.articles || []); } catch(e) {}
+      return {
+        dbId: row.id, issue: parseInt(row.issue) || 0, date: row.date || '',
+        publisher: row.publisher || '사단법인 AI융합연구소',
+        summary: row.summary || '', articles: arts, editorial: row.editorial || ''
+      };
+    });
   }
-  function saveNl(d) { localStorage.setItem(NL_KEY, JSON.stringify(d)); }
+
+  async function upsertNlIssue(issueObj) {
+    if (!sb) return;
+    var payload = {
+      issue: String(issueObj.issue), date: issueObj.date,
+      publisher: issueObj.publisher, summary: issueObj.summary,
+      articles: JSON.stringify(issueObj.articles), editorial: issueObj.editorial
+    };
+    if (issueObj.dbId) {
+      await sb.from('newsletter_issues').update(payload).eq('id', issueObj.dbId);
+    } else {
+      var { data } = await sb.from('newsletter_issues').insert([payload]).select();
+      if (data && data[0]) issueObj.dbId = data[0].id;
+    }
+  }
+
+  async function deleteNlIssue(issueObj) {
+    if (!sb || !issueObj.dbId) return;
+    await sb.from('newsletter_issues').delete().eq('id', issueObj.dbId);
+  }
 
   const typeMap = {
     paper:  { cls:'t-pap', label:'논문' },
@@ -2060,49 +2136,248 @@
     document.getElementById('noLinkPopup').classList.remove('open');
   }
 
+  /* ── 프론트 렌더링: 최신호 펼침 + 과거호 아코디언 ── */
   function renderNewsletter() {
-    const nl = loadNl();
+    var issues = nlIssues;
     const container = document.getElementById('newsletter-content');
-    if (!nl.date && !nl.articles.length) {
-      container.innerHTML = '<div class="nl-empty">발행된 뉴스레터가 없습니다.<br>관리자 패널(🔐)에서 뉴스레터를 등록해 주세요.</div>';
+    if (!issues.length) {
+      container.innerHTML = '<div class="nl-empty">발행된 뉴스레터가 없습니다.<br>관리자 패널(🔐)에서 뉴스레터를 발행해 주세요.</div>';
       return;
     }
     let html = '';
-    // 헤더
-    html += `<div class="nl-header">
-      <div class="nl-badge">📮 Weekly Newsletter</div>
-      <h3>AI융합연구소 뉴스레터</h3>
-      <div class="nl-meta">
-        <span>📅 발행일: ${escapeHtml(nl.date || '미정')}</span>
-        <span>🏛️ ${escapeHtml(nl.publisher || '사단법인 AI융합연구소')}</span>
-      </div>
-    </div>`;
-    // 이번 호 요약
+    issues.forEach((nl, idx) => {
+      const isLatest = (idx === 0);
+      const issueBody = buildIssueHtml(nl, idx);
+      if (isLatest) {
+        html += issueBody;
+      } else {
+        const accId = 'nlAcc' + idx;
+        html += '<div class="nl-accordion">' +
+          '<button class="nl-acc-toggle" onclick="toggleNlAcc(\'' + accId + '\', this)">' +
+            '<span><span class="nl-issue-label">제' + nl.issue + '호</span> ' + escapeHtml(nl.date || '') + ' — ' + escapeHtml((nl.summary || '').substring(0,40)) + ((nl.summary||'').length>40?'...':'') + '</span>' +
+            '<span class="nl-acc-arrow">▼</span>' +
+          '</button>' +
+          '<div class="nl-acc-body" id="' + accId + '">' + issueBody + '</div>' +
+        '</div>';
+      }
+    });
+    container.innerHTML = html;
+  }
+
+  function buildIssueHtml(nl) {
+    let h = '';
+    h += '<div class="nl-header">' +
+      '<div class="nl-badge">📮 제' + nl.issue + '호</div>' +
+      '<h3>AI융합연구소 뉴스레터</h3>' +
+      '<div class="nl-meta">' +
+        '<span>📅 발행일: ' + escapeHtml(nl.date || '미정') + '</span>' +
+        '<span>🏛️ ' + escapeHtml(nl.publisher || '사단법인 AI융합연구소') + '</span>' +
+      '</div></div>';
     if (nl.summary) {
-      html += `<div class="nl-summary"><h4>📌 이번 호 요약</h4><p>${escapeHtml(nl.summary)}</p></div>`;
+      h += '<div class="nl-summary"><h4>📌 이번 호 요약</h4><p>' + escapeHtml(nl.summary) + '</p></div>';
     }
-    // 주요 뉴스
-    if (nl.articles.length) {
-      nl.articles.forEach((a, i) => {
-        html += `<div class="nl-article">
-          <button class="nl-admin-del" onclick="delNlArticle(${i})" style="display:none;">✕</button>
-          <div class="nl-article-num">${i+1}</div>
-          <h3>${escapeHtml(a.title)}</h3>
-          <p>${escapeHtml(a.body)}</p>
-          <div class="nl-source">📰 ${a.sourceLink ? '<a href="'+escapeHtml(a.sourceLink)+'" target="_blank">'+escapeHtml(a.source)+'</a>' : escapeHtml(a.source)} | ${escapeHtml(a.sourceDate)}</div>
-          ${a.insight ? '<div class="nl-insight"><div class="nl-insight-label">🔬 연구소 시각</div><p>'+escapeHtml(a.insight)+'</p></div>' : ''}
-        </div>`;
+    if (nl.articles && nl.articles.length) {
+      nl.articles.forEach(function(a, i) {
+        var srcHtml = a.sourceLink
+          ? '<a href="' + escapeHtml(a.sourceLink) + '" target="_blank">' + escapeHtml(a.source) + '</a>'
+          : escapeHtml(a.source);
+        h += '<div class="nl-article">' +
+          '<div class="nl-article-num">' + (i+1) + '</div>' +
+          '<h3>' + escapeHtml(a.title) + '</h3>' +
+          '<p>' + escapeHtml(a.body) + '</p>' +
+          '<div class="nl-source">📰 ' + srcHtml + ' | ' + escapeHtml(a.sourceDate) + '</div>' +
+          (a.insight ? '<div class="nl-insight"><div class="nl-insight-label">🔬 연구소 시각</div><p>' + escapeHtml(a.insight) + '</p></div>' : '') +
+        '</div>';
       });
     }
-    // 편집 후기
     if (nl.editorial) {
-      html += `<div class="nl-editorial">
-        <h4>✍️ 편집 후기</h4>
-        <p>${escapeHtml(nl.editorial)}</p>
-        <div class="nl-sign">— 사단법인 AI융합연구소 | jejuailab.com</div>
-      </div>`;
+      h += '<div class="nl-editorial">' +
+        '<h4>✍️ 편집 후기</h4>' +
+        '<p>' + escapeHtml(nl.editorial) + '</p>' +
+        '<div class="nl-sign">— 사단법인 AI융합연구소 | jejuailab.com</div>' +
+      '</div>';
     }
-    container.innerHTML = html;
+    return h;
+  }
+
+  function toggleNlAcc(id, btn) {
+    var body = document.getElementById(id);
+    var isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+  }
+
+  /* ── 관리자: 호수 관리 ── */
+  async function createNewIssue() {
+    var nextNum = nlIssues.length ? nlIssues[0].issue + 1 : 1;
+    var today = new Date().toISOString().slice(0,10);
+    var newIssue = {
+      issue: nextNum, date: today, publisher: '사단법인 AI융합연구소',
+      summary: '', articles: [], editorial: ''
+    };
+    await upsertNlIssue(newIssue);
+    nlIssues.unshift(newIssue);
+    currentIssueIdx = 0;
+    populateIssueSelect();
+    loadIssueToForm();
+    renderNewsletter();
+    alert('✅ 제' + nextNum + '호가 생성되었습니다!');
+  }
+
+  async function deleteCurrentIssue() {
+    if (currentIssueIdx < 0) return;
+    var issue = nlIssues[currentIssueIdx];
+    if (!confirm('제' + issue.issue + '호를 삭제하시겠습니까? 복구할 수 없습니다.')) return;
+    await deleteNlIssue(issue);
+    nlIssues.splice(currentIssueIdx, 1);
+    currentIssueIdx = nlIssues.length ? 0 : -1;
+    populateIssueSelect();
+    if (currentIssueIdx >= 0) loadIssueToForm();
+    else document.getElementById('nlEditorArea').style.display = 'none';
+    renderNewsletter();
+  }
+
+  function populateIssueSelect() {
+    var issues = nlIssues;
+    var sel = document.getElementById('nlIssueSelect');
+    sel.innerHTML = issues.length
+      ? issues.map(function(nl, i) { return '<option value="' + i + '">제' + nl.issue + '호 (' + (nl.date || '날짜미정') + ')</option>'; }).join('')
+      : '<option value="-1">발행된 호가 없습니다</option>';
+    if (currentIssueIdx >= 0 && currentIssueIdx < issues.length) sel.value = currentIssueIdx;
+  }
+
+  function onIssueSelect() {
+    currentIssueIdx = parseInt(document.getElementById('nlIssueSelect').value);
+    if (currentIssueIdx >= 0) loadIssueToForm();
+    else document.getElementById('nlEditorArea').style.display = 'none';
+  }
+
+  function loadIssueToForm() {
+    var issues = nlIssues;
+    if (currentIssueIdx < 0 || currentIssueIdx >= issues.length) return;
+    var nl = issues[currentIssueIdx];
+    document.getElementById('nlEditorArea').style.display = 'block';
+    document.getElementById('nlDate').value = nl.date || '';
+    document.getElementById('nlPublisher').value = nl.publisher || '사단법인 AI융합연구소';
+    document.getElementById('nlSummary').value = nl.summary || '';
+    document.getElementById('nlEditorial').value = nl.editorial || '';
+    editingArticleIdx = -1;
+    resetNlArticleForm();
+    renderAdminNews();
+  }
+
+  /* ── 관리자: 발행정보 / 편집후기 저장 ── */
+  async function saveNlMeta() {
+    if (currentIssueIdx < 0) return;
+    nlIssues[currentIssueIdx].date = document.getElementById('nlDate').value.trim();
+    nlIssues[currentIssueIdx].publisher = document.getElementById('nlPublisher').value.trim();
+    nlIssues[currentIssueIdx].summary = document.getElementById('nlSummary').value.trim();
+    await upsertNlIssue(nlIssues[currentIssueIdx]);
+    populateIssueSelect();
+    renderNewsletter();
+    alert('✅ 발행정보가 저장되었습니다!');
+  }
+
+  async function saveNlEditorial() {
+    if (currentIssueIdx < 0) return;
+    nlIssues[currentIssueIdx].editorial = document.getElementById('nlEditorial').value.trim();
+    await upsertNlIssue(nlIssues[currentIssueIdx]);
+    renderNewsletter();
+    alert('✅ 편집후기가 저장되었습니다!');
+  }
+
+  /* ── 관리자: 뉴스 추가 / 수정 / 삭제 ── */
+  async function addOrUpdateNlArticle() {
+    var title = document.getElementById('nlTitle').value.trim();
+    if (!title) { alert('제목을 입력해 주세요.'); return; }
+    if (currentIssueIdx < 0) return;
+    var article = {
+      title: title,
+      body: document.getElementById('nlBody').value.trim(),
+      source: document.getElementById('nlSource').value.trim(),
+      sourceDate: document.getElementById('nlSourceDate').value.trim(),
+      sourceLink: document.getElementById('nlSourceLink').value.trim(),
+      insight: document.getElementById('nlInsight').value.trim(),
+      id: Date.now()
+    };
+    if (editingArticleIdx >= 0) {
+      article.id = nlIssues[currentIssueIdx].articles[editingArticleIdx].id;
+      nlIssues[currentIssueIdx].articles[editingArticleIdx] = article;
+      editingArticleIdx = -1;
+      alert('✅ 뉴스가 수정되었습니다!');
+    } else {
+      nlIssues[currentIssueIdx].articles.push(article);
+      alert('✅ 뉴스가 추가되었습니다!');
+    }
+    await upsertNlIssue(nlIssues[currentIssueIdx]);
+    resetNlArticleForm();
+    renderAdminNews();
+    renderNewsletter();
+  }
+
+  function editNlArticle(i) {
+    if (currentIssueIdx < 0) return;
+    var a = nlIssues[currentIssueIdx].articles[i];
+    if (!a) return;
+    editingArticleIdx = i;
+    document.getElementById('nlTitle').value = a.title || '';
+    document.getElementById('nlBody').value = a.body || '';
+    document.getElementById('nlSource').value = a.source || '';
+    document.getElementById('nlSourceDate').value = a.sourceDate || '';
+    document.getElementById('nlSourceLink').value = a.sourceLink || '';
+    document.getElementById('nlInsight').value = a.insight || '';
+    document.getElementById('nlArticleFormTitle').textContent = '✏️ 뉴스 수정';
+    document.getElementById('nlArticleSubmitBtn').textContent = '수정 저장';
+    document.getElementById('nlEditingNote').classList.add('show');
+    document.getElementById('nlArticleCancelBtn').classList.add('show');
+  }
+
+  function cancelNlArticleEdit() {
+    editingArticleIdx = -1;
+    resetNlArticleForm();
+  }
+
+  function resetNlArticleForm() {
+    document.getElementById('nlTitle').value = '';
+    document.getElementById('nlBody').value = '';
+    document.getElementById('nlSource').value = '';
+    document.getElementById('nlSourceDate').value = '';
+    document.getElementById('nlSourceLink').value = '';
+    document.getElementById('nlInsight').value = '';
+    document.getElementById('nlArticleFormTitle').textContent = '➕ 주요 뉴스 등록';
+    document.getElementById('nlArticleSubmitBtn').textContent = '뉴스 추가';
+    document.getElementById('nlEditingNote').classList.remove('show');
+    document.getElementById('nlArticleCancelBtn').classList.remove('show');
+  }
+
+  async function delNlArticle(i) {
+    if (!confirm('이 뉴스를 삭제하시겠습니까?')) return;
+    if (currentIssueIdx < 0) return;
+    nlIssues[currentIssueIdx].articles.splice(i, 1);
+    await upsertNlIssue(nlIssues[currentIssueIdx]);
+    if (editingArticleIdx === i) cancelNlArticleEdit();
+    renderAdminNews();
+    renderNewsletter();
+  }
+
+  function renderAdminNews() {
+    var issues = nlIssues;
+    var el = document.getElementById('adminNewsList');
+    if (currentIssueIdx < 0 || !issues[currentIssueIdx]) { el.innerHTML = '<div class="empty-msg">호를 먼저 선택하세요.</div>'; return; }
+    var arts = issues[currentIssueIdx].articles;
+    if (!arts.length) { el.innerHTML = '<div class="empty-msg">등록된 뉴스가 없습니다.</div>'; return; }
+    el.innerHTML = arts.map(function(a, i) {
+      return '<div class="admin-item">' +
+        '<div class="admin-item-info">' +
+          '<strong>' + escapeHtml(a.title) + '</strong>' +
+          '<span>' + escapeHtml(a.source || '') + ' · ' + escapeHtml(a.sourceDate || '') + '</span>' +
+        '</div>' +
+        '<div>' +
+          '<button class="admin-edit" onclick="editNlArticle(' + i + ')">수정</button>' +
+          '<button class="admin-del" onclick="delNlArticle(' + i + ')">삭제</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
   }
 
   function openAdmin() {
@@ -2125,7 +2400,8 @@
       document.getElementById('adminScreen').style.display = 'block';
       document.body.classList.add('admin-mode');
       renderAdminArch();
-      renderAdminNews();
+      populateIssueSelect();
+      if (currentIssueIdx >= 0) loadIssueToForm();
     } else {
       document.getElementById('pwErr').style.display = 'block';
     }
@@ -2345,77 +2621,6 @@
       </div>`).join('');
   }
 
-  function saveNlMeta() {
-    const nl = loadNl();
-    nl.date = document.getElementById('nlDate').value.trim();
-    nl.publisher = document.getElementById('nlPublisher').value.trim();
-    nl.summary = document.getElementById('nlSummary').value.trim();
-    saveNl(nl);
-    renderNewsletter();
-    alert('✅ 발행정보가 저장되었습니다!');
-  }
-
-  function addNlArticle() {
-    const title = document.getElementById('nlTitle').value.trim();
-    if (!title) { alert('제목을 입력해 주세요.'); return; }
-    const nl = loadNl();
-    nl.articles.push({
-      title,
-      body: document.getElementById('nlBody').value.trim(),
-      source: document.getElementById('nlSource').value.trim(),
-      sourceDate: document.getElementById('nlSourceDate').value.trim(),
-      sourceLink: document.getElementById('nlSourceLink').value.trim(),
-      insight: document.getElementById('nlInsight').value.trim(),
-      id: Date.now()
-    });
-    saveNl(nl);
-    document.getElementById('nlTitle').value = '';
-    document.getElementById('nlBody').value = '';
-    document.getElementById('nlSource').value = '';
-    document.getElementById('nlSourceDate').value = '';
-    document.getElementById('nlSourceLink').value = '';
-    document.getElementById('nlInsight').value = '';
-    renderAdminNews();
-    renderNewsletter();
-    alert('✅ 뉴스가 추가되었습니다!');
-  }
-
-  function saveNlEditorial() {
-    const nl = loadNl();
-    nl.editorial = document.getElementById('nlEditorial').value.trim();
-    saveNl(nl);
-    renderNewsletter();
-    alert('✅ 편집후기가 저장되었습니다!');
-  }
-
-  function delNlArticle(i) {
-    if (!confirm('이 뉴스를 삭제하시겠습니까?')) return;
-    const nl = loadNl();
-    nl.articles.splice(i, 1);
-    saveNl(nl);
-    renderAdminNews();
-    renderNewsletter();
-  }
-
-  function renderAdminNews() {
-    const nl = loadNl();
-    const el = document.getElementById('adminNewsList');
-    // 폼에 기존 값 채우기
-    if (document.getElementById('nlDate')) document.getElementById('nlDate').value = nl.date || '';
-    if (document.getElementById('nlPublisher')) document.getElementById('nlPublisher').value = nl.publisher || '사단법인 AI융합연구소';
-    if (document.getElementById('nlSummary')) document.getElementById('nlSummary').value = nl.summary || '';
-    if (document.getElementById('nlEditorial')) document.getElementById('nlEditorial').value = nl.editorial || '';
-
-    if (!nl.articles.length) { el.innerHTML = '<div class="empty-msg">등록된 뉴스가 없습니다.</div>'; return; }
-    el.innerHTML = nl.articles.map((a, i) => `
-      <div class="admin-item">
-        <div class="admin-item-info">
-          <strong>${escapeHtml(a.title)}</strong>
-          <span>${escapeHtml(a.source || '')} · ${escapeHtml(a.sourceDate || '')}</span>
-        </div>
-        <button class="admin-del" onclick="delNlArticle(${i})">삭제</button>
-      </div>`).join('');
-  }
 
   function filterArch(type, btn) {
     document.querySelectorAll('.atab').forEach(b => b.classList.remove('on'));
@@ -2442,8 +2647,15 @@
   });
 
   (async function initSite() {
+    // 뉴스레터: Supabase에서 로드
+    await fetchNlIssues();
+    if (nlIssues.length) {
+      currentIssueIdx = 0;
+    }
     renderNewsletter();
-    renderAdminNews();
+    populateIssueSelect();
+    if (currentIssueIdx >= 0) loadIssueToForm();
+    // 자료실 초기화
     const typeSelect = document.getElementById('aType');
     if (typeSelect) {
       typeSelect.addEventListener('change', toggleArchiveFormByType);
