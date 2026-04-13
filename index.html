@@ -352,20 +352,59 @@
     .detail-block h4 { font-family: 'Noto Sans KR', sans-serif; color: var(--navy); font-size: 0.84rem; margin-bottom: 0.35rem; }
     .detail-block p { color: var(--gray-600); font-size: 0.84rem; line-height: 1.75; white-space: pre-wrap; }
 
-    /* ── NEWS ── */
-    #news { background: #fff; }
-    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.4rem; }
-    .news-card { background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid var(--gray-200); transition: all 0.25s; }
-    .news-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.1); transform: translateY(-3px); }
-    .news-thumb { height: 150px; display: flex; align-items: center; justify-content: center; font-size: 2.3rem; }
-    .th-navy { background: linear-gradient(135deg, var(--navy), var(--navy-mid)); }
-    .th-teal { background: linear-gradient(135deg, var(--cyan), var(--cyan-light)); }
-    .th-grad { background: linear-gradient(135deg, #1a3a5c, var(--cyan)); }
-    .news-body { padding: 1.2rem 1.4rem; }
-    .ncat { font-size: 0.7rem; font-weight: 700; color: var(--cyan); letter-spacing: 0.05em; margin-bottom: 0.4rem; }
-    .news-body h3 { font-family: 'Noto Sans KR', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; line-height: 1.55; }
-    .news-body p { font-size: 0.79rem; color: var(--gray-600); margin-bottom: 0.7rem; }
-    .ndate { font-size: 0.73rem; color: var(--gray-400); }
+    /* ── NEWSLETTER ── */
+    #newsletter { background: #fff; }
+    .nl-container { max-width: 760px; margin: 0 auto; }
+    .nl-header {
+      background: linear-gradient(135deg, var(--navy-dark), var(--navy) 60%, #003344);
+      border-radius: 18px; padding: 2.2rem 2rem; margin-bottom: 2rem; text-align: center;
+      border: 1px solid rgba(0,181,181,0.3);
+    }
+    .nl-header h3 { font-family: 'Nanum Myeongjo', serif; font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 0.6rem; }
+    .nl-meta { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .nl-meta span { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+    .nl-summary {
+      background: var(--cyan-pale); border: 1.5px solid var(--cyan);
+      border-radius: 14px; padding: 1.4rem 1.6rem; margin-bottom: 2rem;
+    }
+    .nl-summary h4 { font-family: 'Noto Sans KR', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--cyan); margin-bottom: 0.6rem; }
+    .nl-summary p { font-size: 0.88rem; color: var(--gray-800); line-height: 1.75; }
+    .nl-article {
+      background: #fff; border: 1px solid var(--gray-200); border-radius: 16px;
+      padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; transition: all 0.25s;
+      border-left: 4px solid var(--cyan);
+    }
+    .nl-article:hover { box-shadow: 0 6px 24px rgba(0,51,102,0.09); transform: translateY(-2px); }
+    .nl-article-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; background: var(--navy); color: #fff;
+      border-radius: 50%; font-size: 0.78rem; font-weight: 800; margin-bottom: 0.8rem;
+    }
+    .nl-article h3 { font-family: 'Noto Sans KR', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 0.6rem; line-height: 1.6; }
+    .nl-article p { font-size: 0.86rem; color: var(--gray-600); line-height: 1.75; margin-bottom: 0.7rem; }
+    .nl-source { font-size: 0.76rem; color: var(--gray-400); margin-bottom: 0.8rem; }
+    .nl-source a { color: var(--cyan); text-decoration: underline; }
+    .nl-insight {
+      background: var(--gray-50); border-radius: 10px; padding: 0.9rem 1.1rem;
+      border-left: 3px solid var(--cyan-light);
+    }
+    .nl-insight-label { font-size: 0.72rem; font-weight: 700; color: var(--cyan); letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+    .nl-insight p { font-size: 0.82rem; color: var(--gray-600); line-height: 1.7; margin: 0; }
+    .nl-editorial {
+      background: linear-gradient(135deg, var(--gray-50), #f0f7f7);
+      border: 1px solid var(--gray-200); border-radius: 16px;
+      padding: 1.8rem 2rem; margin-top: 2rem;
+    }
+    .nl-editorial h4 { font-family: 'Nanum Myeongjo', serif; font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.8rem; }
+    .nl-editorial p { font-size: 0.88rem; color: var(--gray-600); line-height: 1.85; }
+    .nl-editorial .nl-sign { text-align: right; margin-top: 1rem; font-size: 0.82rem; color: var(--navy); font-weight: 600; }
+    .nl-empty { text-align: center; padding: 3rem; color: var(--gray-400); font-size: 0.88rem; border: 2px dashed var(--gray-200); border-radius: 12px; }
+    .nl-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(0,139,139,0.15); border: 1px solid rgba(0,181,181,0.4);
+      color: var(--cyan-light); padding: 0.3rem 0.9rem; border-radius: 16px;
+      font-size: 0.72rem; letter-spacing: 0.06em; margin-bottom: 1rem;
+    }
 
     /* ── CONSULT ── */
     #consult { background: linear-gradient(155deg, var(--navy-dark), var(--navy)); }
@@ -498,9 +537,9 @@
     .empty-msg { text-align: center; padding: 2.5rem; color: var(--gray-400); font-size: 0.88rem; border: 2px dashed var(--gray-200); border-radius: 12px; }
     .arch-item-del { background: #fee2e2; color: #dc2626; border: none; cursor: none; padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; display: none; }
     body.admin-mode .arch-item-del { display: inline-block; cursor: pointer; }
-    body.admin-mode .news-del { display: flex; }
-    .news-del { display: none; position: absolute; top: 0.6rem; right: 0.6rem; background: #dc2626; color: #fff; border: none; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; font-size: 0.85rem; align-items: center; justify-content: center; z-index: 10; }
-    .news-card { position: relative; }
+    body.admin-mode .nl-admin-del { display: inline-block; }
+    .nl-admin-del { display: none; position: absolute; top: 0.6rem; right: 0.6rem; background: #dc2626; color: #fff; border: none; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; font-size: 0.85rem; align-items: center; justify-content: center; z-index: 10; }
+    .nl-article { position: relative; }
 
 
     /* ── MEMBERSHIP ── */
@@ -848,7 +887,7 @@
  <li><a href="#rnd">연구 실적</a></li>
  <li><a href="#roadmap">로드맵</a></li>
  <li><a href="#archive">자료실</a></li>
- <li><a href="#news">뉴스</a></li>
+ <li><a href="#newsletter">뉴스레터</a></li>
  <li><a href="#membership">회원 신청</a></li>
  <li><a href="#consult" class="nav-cta">자문 신청</a></li>
  </ul>
@@ -1232,16 +1271,16 @@
  </div>
 </section>
 
-<!-- NEWS -->
-<section id="news">
+<!-- NEWSLETTER -->
+<section id="newsletter">
  <div class="inner">
  <div class="sec-hd">
- <div class="sec-tag">News & Notice</div>
- <h2 class="sec-title">뉴스 & 공지</h2>
- <p class="sec-desc">연구소 소식 및 언론 보도</p>
+ <div class="sec-tag">Newsletter</div>
+ <h2 class="sec-title">뉴스레터</h2>
+ <p class="sec-desc">AI·빅데이터·관광·정책 분야 주요 동향을 매주 전합니다</p>
  <div class="divider"></div>
  </div>
- <div id="news-grid" class="news-grid"></div>
+ <div id="newsletter-content" class="nl-container"></div>
  </div>
 </section>
 
@@ -1524,7 +1563,7 @@
  <li><a href="#rnd">연구 실적</a></li>
  <li><a href="#roadmap">성장 로드맵</a></li>
  <li><a href="#archive">자료실</a></li>
- <li><a href="#news">뉴스 & 공지</a></li>
+ <li><a href="#newsletter">뉴스레터</a></li>
  <li><a href="#consult">자문 신청</a></li>
  </ul>
  </div>
@@ -1574,7 +1613,7 @@
  <div class="admin-body">
  <div class="admin-tabs">
  <button class="admin-tab on" onclick="switchAdminTab('arch',this)">📂 자료실</button>
- <button class="admin-tab" onclick="switchAdminTab('news',this)">📰 뉴스&공지</button>
+ <button class="admin-tab" onclick="switchAdminTab('news',this)">📰 뉴스레터</button>
  </div>
 
  <!-- 자료실 관리 -->
@@ -1660,36 +1699,68 @@
  <div id="adminArchList"></div>
  </div>
 
- <!-- 뉴스 관리 -->
+ <!-- 뉴스레터 관리 -->
  <div id="adminNews" class="admin-section">
  <div class="admin-form">
- <h3>➕ 새 뉴스/공지 등록</h3>
+ <h3>📋 뉴스레터 발행 정보</h3>
  <div class="af-row">
  <div>
- <label>카테고리</label>
- <select id="nCat">
- <option>공지사항</option>
- <option>연구 성과</option>
- <option>언론 보도</option>
- <option>행사/세미나</option>
- </select>
+ <label>발행일 (예: 2026-04-13)</label>
+ <input type="text" id="nlDate" placeholder="2026-04-13" />
  </div>
  <div>
- <label>날짜 (예: 2026.03.15)</label>
- <input type="text" id="nDate" placeholder="2026.03.15" />
+ <label>발행처</label>
+ <input type="text" id="nlPublisher" value="사단법인 AI융합연구소" />
  </div>
  </div>
+ <div class="af-row af-full">
+ <label>이번 호 요약</label>
+ <textarea id="nlSummary" placeholder="이번 호 뉴스레터의 핵심 내용을 2~3문장으로 요약"></textarea>
+ </div>
+ <button class="af-add-btn" onclick="saveNlMeta()">발행정보 저장</button>
+ </div>
+
+ <div class="admin-form" style="margin-top:1rem;">
+ <h3>➕ 주요 뉴스 등록</h3>
  <div class="af-row af-full">
  <label>제목 *</label>
- <input type="text" id="nTitle" placeholder="뉴스 또는 공지 제목" />
+ <input type="text" id="nlTitle" placeholder="뉴스 제목" />
  </div>
  <div class="af-row af-full">
- <label>내용 요약</label>
- <textarea id="nBody" placeholder="간략한 내용을 입력하세요..."></textarea>
+ <label>내용 요약 *</label>
+ <textarea id="nlBody" placeholder="기사 핵심 내용을 3~5문장으로 요약"></textarea>
  </div>
- <button class="af-add-btn" onclick="addNews()">등록하기</button>
+ <div class="af-row">
+ <div>
+ <label>출처 (언론사명)</label>
+ <input type="text" id="nlSource" placeholder="예: 코리아타임뉴스" />
  </div>
- <div class="admin-list-title">등록된 뉴스/공지 목록</div>
+ <div>
+ <label>보도일 (예: 2026.04.07)</label>
+ <input type="text" id="nlSourceDate" placeholder="2026.04.07" />
+ </div>
+ </div>
+ <div class="af-row af-full">
+ <label>출처 링크 (선택)</label>
+ <input type="url" id="nlSourceLink" placeholder="https://..." />
+ </div>
+ <div class="af-row af-full">
+ <label>연구소 시각</label>
+ <textarea id="nlInsight" placeholder="이 뉴스에 대한 AI융합연구소의 관점을 1~2문장으로"></textarea>
+ </div>
+ <button class="af-add-btn" onclick="addNlArticle()">뉴스 추가</button>
+ </div>
+
+ <div class="admin-form" style="margin-top:1rem;">
+ <h3>✍️ 편집 후기</h3>
+ <div class="af-row af-full">
+ <label>편집 후기</label>
+ <textarea id="nlEditorial" placeholder="이번 호 뉴스를 관통하는 트렌드나 시사점을 짧게 정리"></textarea>
+ </div>
+ <button class="af-add-btn" onclick="saveNlEditorial()">편집후기 저장</button>
+ </div>
+
+ <div class="admin-list-title" style="margin-top:1.5rem;">등록된 뉴스 목록</div>
  <div id="adminNewsList"></div>
  </div>
  </div>
@@ -1726,7 +1797,7 @@
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const ADMIN_PW = '581558';
-  const NEWS_KEY = 'aijeju_news';
+  const NL_KEY = 'aijeju_newsletter';
   const LEGACY_ARCH_KEY = 'aijeju_archive';
 
   // Supabase 연결 정보
@@ -1747,8 +1818,14 @@
   let archiveLoadError = '';
   let editingArchId = null;
 
-  function loadNews() { return JSON.parse(localStorage.getItem(NEWS_KEY) || '[]'); }
-  function saveNews(d) { localStorage.setItem(NEWS_KEY, JSON.stringify(d)); }
+  // 뉴스레터 데이터 구조
+  function loadNl() {
+    return JSON.parse(localStorage.getItem(NL_KEY) || JSON.stringify({
+      date: '', publisher: '사단법인 AI융합연구소', summary: '',
+      articles: [], editorial: ''
+    }));
+  }
+  function saveNl(d) { localStorage.setItem(NL_KEY, JSON.stringify(d)); }
 
   const typeMap = {
     paper:  { cls:'t-pap', label:'논문' },
@@ -1983,29 +2060,49 @@
     document.getElementById('noLinkPopup').classList.remove('open');
   }
 
-  const catEmoji = { '공지사항':'📢', '연구 성과':'🏆', '언론 보도':'📰', '행사/세미나':'🎤' };
-  const catColor = { '공지사항':'th-navy', '연구 성과':'th-grad', '언론 보도':'th-teal', '행사/세미나':'th-navy' };
-  function renderNews() {
-    const items = loadNews();
-    const grid = document.getElementById('news-grid');
-    if (!items.length) {
-      grid.innerHTML = '<div class="empty-msg" style="grid-column:1/-1">등록된 뉴스가 없습니다.<br>관리자 패널(🔐)에서 뉴스를 등록해 주세요.</div>';
+  function renderNewsletter() {
+    const nl = loadNl();
+    const container = document.getElementById('newsletter-content');
+    if (!nl.date && !nl.articles.length) {
+      container.innerHTML = '<div class="nl-empty">발행된 뉴스레터가 없습니다.<br>관리자 패널(🔐)에서 뉴스레터를 등록해 주세요.</div>';
       return;
     }
-    grid.innerHTML = items.map((it, i) => {
-      const emoji = catEmoji[it.cat] || '📋';
-      const col = catColor[it.cat] || 'th-navy';
-      return `<div class="news-card">
-        <button class="news-del" onclick="delNews(${i})">✕</button>
-        <div class="news-thumb ${col}">${emoji}</div>
-        <div class="news-body">
-          <div class="ncat">${escapeHtml(it.cat)}</div>
-          <h3>${escapeHtml(it.title)}</h3>
-          <p>${escapeHtml(it.body || '')}</p>
-          <span class="ndate">${escapeHtml(it.date || '')}</span>
-        </div>
+    let html = '';
+    // 헤더
+    html += `<div class="nl-header">
+      <div class="nl-badge">📮 Weekly Newsletter</div>
+      <h3>AI융합연구소 뉴스레터</h3>
+      <div class="nl-meta">
+        <span>📅 발행일: ${escapeHtml(nl.date || '미정')}</span>
+        <span>🏛️ ${escapeHtml(nl.publisher || '사단법인 AI융합연구소')}</span>
+      </div>
+    </div>`;
+    // 이번 호 요약
+    if (nl.summary) {
+      html += `<div class="nl-summary"><h4>📌 이번 호 요약</h4><p>${escapeHtml(nl.summary)}</p></div>`;
+    }
+    // 주요 뉴스
+    if (nl.articles.length) {
+      nl.articles.forEach((a, i) => {
+        html += `<div class="nl-article">
+          <button class="nl-admin-del" onclick="delNlArticle(${i})" style="display:none;">✕</button>
+          <div class="nl-article-num">${i+1}</div>
+          <h3>${escapeHtml(a.title)}</h3>
+          <p>${escapeHtml(a.body)}</p>
+          <div class="nl-source">📰 ${a.sourceLink ? '<a href="'+escapeHtml(a.sourceLink)+'" target="_blank">'+escapeHtml(a.source)+'</a>' : escapeHtml(a.source)} | ${escapeHtml(a.sourceDate)}</div>
+          ${a.insight ? '<div class="nl-insight"><div class="nl-insight-label">🔬 연구소 시각</div><p>'+escapeHtml(a.insight)+'</p></div>' : ''}
+        </div>`;
+      });
+    }
+    // 편집 후기
+    if (nl.editorial) {
+      html += `<div class="nl-editorial">
+        <h4>✍️ 편집 후기</h4>
+        <p>${escapeHtml(nl.editorial)}</p>
+        <div class="nl-sign">— 사단법인 AI융합연구소 | jejuailab.com</div>
       </div>`;
-    }).join('');
+    }
+    container.innerHTML = html;
   }
 
   function openAdmin() {
@@ -2020,7 +2117,7 @@
     document.getElementById('adminOverlay').classList.remove('open');
     document.body.classList.remove('admin-mode');
     renderArch();
-    renderNews();
+    renderNewsletter();
   }
   function checkPw() {
     if (document.getElementById('pwInput').value === ADMIN_PW) {
@@ -2248,46 +2345,75 @@
       </div>`).join('');
   }
 
-  function addNews() {
-    const title = document.getElementById('nTitle').value.trim();
-    if (!title) { alert('제목을 입력해 주세요.'); return; }
-    const items = loadNews();
-    items.unshift({
-      cat: document.getElementById('nCat').value,
-      title,
-      body: document.getElementById('nBody').value.trim(),
-      date: document.getElementById('nDate').value.trim(),
-      id: Date.now()
-    });
-    saveNews(items);
-    document.getElementById('nTitle').value = '';
-    document.getElementById('nBody').value = '';
-    document.getElementById('nDate').value = '';
-    renderAdminNews();
-    renderNews();
-    alert('✅ 뉴스/공지가 등록되었습니다!');
+  function saveNlMeta() {
+    const nl = loadNl();
+    nl.date = document.getElementById('nlDate').value.trim();
+    nl.publisher = document.getElementById('nlPublisher').value.trim();
+    nl.summary = document.getElementById('nlSummary').value.trim();
+    saveNl(nl);
+    renderNewsletter();
+    alert('✅ 발행정보가 저장되었습니다!');
   }
 
-  function delNews(i) {
-    if (!confirm('이 뉴스를 삭제하시겠습니까?')) return;
-    const items = loadNews();
-    items.splice(i, 1);
-    saveNews(items);
+  function addNlArticle() {
+    const title = document.getElementById('nlTitle').value.trim();
+    if (!title) { alert('제목을 입력해 주세요.'); return; }
+    const nl = loadNl();
+    nl.articles.push({
+      title,
+      body: document.getElementById('nlBody').value.trim(),
+      source: document.getElementById('nlSource').value.trim(),
+      sourceDate: document.getElementById('nlSourceDate').value.trim(),
+      sourceLink: document.getElementById('nlSourceLink').value.trim(),
+      insight: document.getElementById('nlInsight').value.trim(),
+      id: Date.now()
+    });
+    saveNl(nl);
+    document.getElementById('nlTitle').value = '';
+    document.getElementById('nlBody').value = '';
+    document.getElementById('nlSource').value = '';
+    document.getElementById('nlSourceDate').value = '';
+    document.getElementById('nlSourceLink').value = '';
+    document.getElementById('nlInsight').value = '';
     renderAdminNews();
-    renderNews();
+    renderNewsletter();
+    alert('✅ 뉴스가 추가되었습니다!');
+  }
+
+  function saveNlEditorial() {
+    const nl = loadNl();
+    nl.editorial = document.getElementById('nlEditorial').value.trim();
+    saveNl(nl);
+    renderNewsletter();
+    alert('✅ 편집후기가 저장되었습니다!');
+  }
+
+  function delNlArticle(i) {
+    if (!confirm('이 뉴스를 삭제하시겠습니까?')) return;
+    const nl = loadNl();
+    nl.articles.splice(i, 1);
+    saveNl(nl);
+    renderAdminNews();
+    renderNewsletter();
   }
 
   function renderAdminNews() {
-    const items = loadNews();
+    const nl = loadNl();
     const el = document.getElementById('adminNewsList');
-    if (!items.length) { el.innerHTML = '<div class="empty-msg">등록된 뉴스가 없습니다.</div>'; return; }
-    el.innerHTML = items.map((it, i) => `
+    // 폼에 기존 값 채우기
+    if (document.getElementById('nlDate')) document.getElementById('nlDate').value = nl.date || '';
+    if (document.getElementById('nlPublisher')) document.getElementById('nlPublisher').value = nl.publisher || '사단법인 AI융합연구소';
+    if (document.getElementById('nlSummary')) document.getElementById('nlSummary').value = nl.summary || '';
+    if (document.getElementById('nlEditorial')) document.getElementById('nlEditorial').value = nl.editorial || '';
+
+    if (!nl.articles.length) { el.innerHTML = '<div class="empty-msg">등록된 뉴스가 없습니다.</div>'; return; }
+    el.innerHTML = nl.articles.map((a, i) => `
       <div class="admin-item">
         <div class="admin-item-info">
-          <strong>${escapeHtml(it.title)}</strong>
-          <span>${escapeHtml(it.cat)} · ${escapeHtml(it.date || '')}</span>
+          <strong>${escapeHtml(a.title)}</strong>
+          <span>${escapeHtml(a.source || '')} · ${escapeHtml(a.sourceDate || '')}</span>
         </div>
-        <button class="admin-del" onclick="delNews(${i})">삭제</button>
+        <button class="admin-del" onclick="delNlArticle(${i})">삭제</button>
       </div>`).join('');
   }
 
@@ -2316,7 +2442,7 @@
   });
 
   (async function initSite() {
-    renderNews();
+    renderNewsletter();
     renderAdminNews();
     const typeSelect = document.getElementById('aType');
     if (typeSelect) {
