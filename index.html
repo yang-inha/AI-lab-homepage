@@ -352,7 +352,7 @@
     .detail-block h4 { font-family: 'Noto Sans KR', sans-serif; color: var(--navy); font-size: 0.84rem; margin-bottom: 0.35rem; }
     .detail-block p { color: var(--gray-600); font-size: 0.84rem; line-height: 1.75; white-space: pre-wrap; }
 
-    /* ── NEWSLETTER ── */
+    /* ── Weekly Briefing ── */
     #newsletter { background: #fff; }
     .nl-container { max-width: 760px; margin: 0 auto; }
     .nl-header {
@@ -904,7 +904,7 @@
  <li><a href="#rnd">연구 실적</a></li>
  <li><a href="#roadmap">로드맵</a></li>
  <li><a href="#archive">자료실</a></li>
- <li><a href="#newsletter">뉴스레터</a></li>
+ <li><a href="#newsletter">주간브리핑</a></li>
  <li><a href="#membership">회원 신청</a></li>
  <li><a href="#consult" class="nav-cta">자문 신청</a></li>
  </ul>
@@ -1288,16 +1288,16 @@
  </div>
 </section>
 
-<!-- NEWSLETTER -->
-<section id="newsletter">
+<!-- Weekly Briefing -->
+<section id="Weekly Briefing">
  <div class="inner">
  <div class="sec-hd">
- <div class="sec-tag">Newsletter</div>
- <h2 class="sec-title">뉴스레터</h2>
+ <div class="sec-tag">Weekly Briefing</div>
+ <h2 class="sec-title">주간브리핑</h2>
  <p class="sec-desc">AI·빅데이터·관광·정책 분야 주요 동향을 매주 전합니다</p>
  <div class="divider"></div>
  </div>
- <div id="newsletter-content" class="nl-container"></div>
+ <div id="Weekly Briefing-content" class="nl-container"></div>
  </div>
 </section>
 
@@ -1580,7 +1580,7 @@
  <li><a href="#rnd">연구 실적</a></li>
  <li><a href="#roadmap">성장 로드맵</a></li>
  <li><a href="#archive">자료실</a></li>
- <li><a href="#newsletter">뉴스레터</a></li>
+ <li><a href="#newsletter">주간브리핑</a></li>
  <li><a href="#consult">자문 신청</a></li>
  </ul>
  </div>
@@ -1630,7 +1630,7 @@
  <div class="admin-body">
  <div class="admin-tabs">
  <button class="admin-tab on" onclick="switchAdminTab('arch',this)">📂 자료실</button>
- <button class="admin-tab" onclick="switchAdminTab('news',this)">📰 뉴스레터</button>
+ <button class="admin-tab" onclick="switchAdminTab('news',this)">📰 주간브리핑</button>
  </div>
 
  <!-- 자료실 관리 -->
@@ -1716,10 +1716,10 @@
  <div id="adminArchList"></div>
  </div>
 
- <!-- 뉴스레터 관리 -->
+ <!-- 주간브리핑 관리 -->
  <div id="adminNews" class="admin-section">
  <div class="admin-form">
- <h3>📋 뉴스레터 호수 관리</h3>
+ <h3>📋 주간브리핑 호수 관리</h3>
  <div class="af-row">
  <div>
  <label>편집할 호 선택</label>
@@ -1748,7 +1748,7 @@
  </div>
  <div class="af-row af-full">
  <label>이번 호 요약</label>
- <textarea id="nlSummary" placeholder="이번 호 뉴스레터의 핵심 내용을 2~3문장으로 요약"></textarea>
+ <textarea id="nlSummary" placeholder="이번 호 주간브리핑의 핵심 내용을 2~3문장으로 요약"></textarea>
  </div>
  <button class="af-add-btn" onclick="saveNlMeta()">발행정보 저장</button>
  </div>
@@ -1839,7 +1839,7 @@
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const ADMIN_PW = '581558';
-  const NL_KEY = 'aijeju_newsletter';
+  const NL_KEY = 'aijeju_Weekly Briefing';
   const LEGACY_ARCH_KEY = 'aijeju_archive';
 
   // Supabase 연결 정보
@@ -1860,7 +1860,7 @@
   let archiveLoadError = '';
   let editingArchId = null;
 
-  // ── 뉴스레터: Supabase 연동 ──
+  // ── 주간브리핑: Supabase 연동 ──
   let nlIssues = []; // 메모리 캐시 (issue 내림차순)
   let currentIssueIdx = -1;
   let editingArticleIdx = -1;
@@ -1868,10 +1868,10 @@
   async function fetchNlIssues() {
     if (!sb) { nlIssues = []; return; }
     const { data, error } = await sb
-      .from('newsletter_issues')
+      .from('Weekly Briefing_issues')
       .select('*')
       .order('issue', { ascending: false });
-    if (error) { console.error('뉴스레터 로드 오류:', error); nlIssues = []; return; }
+    if (error) { console.error('주간브리핑 로드 오류:', error); nlIssues = []; return; }
     nlIssues = (data || []).map(function(row) {
       var arts = [];
       try { arts = typeof row.articles === 'string' ? JSON.parse(row.articles) : (row.articles || []); } catch(e) {}
@@ -1891,16 +1891,16 @@
       articles: JSON.stringify(issueObj.articles), editorial: issueObj.editorial
     };
     if (issueObj.dbId) {
-      await sb.from('newsletter_issues').update(payload).eq('id', issueObj.dbId);
+      await sb.from('Weekly Briefing_issues').update(payload).eq('id', issueObj.dbId);
     } else {
-      var { data } = await sb.from('newsletter_issues').insert([payload]).select();
+      var { data } = await sb.from('Weekly Briefing_issues').insert([payload]).select();
       if (data && data[0]) issueObj.dbId = data[0].id;
     }
   }
 
   async function deleteNlIssue(issueObj) {
     if (!sb || !issueObj.dbId) return;
-    await sb.from('newsletter_issues').delete().eq('id', issueObj.dbId);
+    await sb.from('Weekly Briefing').delete().eq('id', issueObj.dbId);
   }
 
   const typeMap = {
@@ -2137,11 +2137,11 @@
   }
 
   /* ── 프론트 렌더링: 최신호 펼침 + 과거호 아코디언 ── */
-  function renderNewsletter() {
+  function renderWeekly Briefing() {
     var issues = nlIssues;
-    const container = document.getElementById('newsletter-content');
+    const container = document.getElementById('Weekly Briefing-content');
     if (!issues.length) {
-      container.innerHTML = '<div class="nl-empty">발행된 뉴스레터가 없습니다.<br>관리자 패널(🔐)에서 뉴스레터를 발행해 주세요.</div>';
+      container.innerHTML = '<div class="nl-empty">발행된 주간브리핑가 없습니다.<br>관리자 패널(🔐)에서 주간브리핑를 발행해 주세요.</div>';
       return;
     }
     let html = '';
@@ -2168,7 +2168,7 @@
     let h = '';
     h += '<div class="nl-header">' +
       '<div class="nl-badge">📮 제' + nl.issue + '호</div>' +
-      '<h3>AI융합연구소 뉴스레터</h3>' +
+      '<h3>AI융합연구소 주간브리핑</h3>' +
       '<div class="nl-meta">' +
         '<span>📅 발행일: ' + escapeHtml(nl.date || '미정') + '</span>' +
         '<span>🏛️ ' + escapeHtml(nl.publisher || '사단법인 AI융합연구소') + '</span>' +
@@ -2220,7 +2220,7 @@
     currentIssueIdx = 0;
     populateIssueSelect();
     loadIssueToForm();
-    renderNewsletter();
+    renderWeekly Briefing();
     alert('✅ 제' + nextNum + '호가 생성되었습니다!');
   }
 
@@ -2234,7 +2234,7 @@
     populateIssueSelect();
     if (currentIssueIdx >= 0) loadIssueToForm();
     else document.getElementById('nlEditorArea').style.display = 'none';
-    renderNewsletter();
+    renderWeekly Briefing();
   }
 
   function populateIssueSelect() {
@@ -2274,7 +2274,7 @@
     nlIssues[currentIssueIdx].summary = document.getElementById('nlSummary').value.trim();
     await upsertNlIssue(nlIssues[currentIssueIdx]);
     populateIssueSelect();
-    renderNewsletter();
+    renderWeekly Briefing();
     alert('✅ 발행정보가 저장되었습니다!');
   }
 
@@ -2282,7 +2282,7 @@
     if (currentIssueIdx < 0) return;
     nlIssues[currentIssueIdx].editorial = document.getElementById('nlEditorial').value.trim();
     await upsertNlIssue(nlIssues[currentIssueIdx]);
-    renderNewsletter();
+    renderWeekly Briefing();
     alert('✅ 편집후기가 저장되었습니다!');
   }
 
@@ -2312,7 +2312,7 @@
     await upsertNlIssue(nlIssues[currentIssueIdx]);
     resetNlArticleForm();
     renderAdminNews();
-    renderNewsletter();
+    renderWeekly Briefing();
   }
 
   function editNlArticle(i) {
@@ -2357,7 +2357,7 @@
     await upsertNlIssue(nlIssues[currentIssueIdx]);
     if (editingArticleIdx === i) cancelNlArticleEdit();
     renderAdminNews();
-    renderNewsletter();
+    renderWeekly Briefing();
   }
 
   function renderAdminNews() {
@@ -2392,7 +2392,7 @@
     document.getElementById('adminOverlay').classList.remove('open');
     document.body.classList.remove('admin-mode');
     renderArch();
-    renderNewsletter();
+    renderWeekly Briefing();
   }
   function checkPw() {
     if (document.getElementById('pwInput').value === ADMIN_PW) {
@@ -2647,12 +2647,12 @@
   });
 
   (async function initSite() {
-    // 뉴스레터: Supabase에서 로드
+    // 주간브리핑: Supabase에서 로드
     await fetchNlIssues();
     if (nlIssues.length) {
       currentIssueIdx = 0;
     }
-    renderNewsletter();
+    renderWeekly Briefing();
     populateIssueSelect();
     if (currentIssueIdx >= 0) loadIssueToForm();
     // 자료실 초기화
