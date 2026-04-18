@@ -1289,7 +1289,7 @@
 </section>
 
 <!-- Weekly Briefing -->
-<section id="Weekly Briefing">
+<section id="newsletter">
  <div class="inner">
  <div class="sec-hd">
  <div class="sec-tag">Weekly Briefing</div>
@@ -1297,7 +1297,7 @@
  <p class="sec-desc">AI·빅데이터·관광·정책 분야 주요 동향을 매주 전합니다</p>
  <div class="divider"></div>
  </div>
- <div id="Weekly Briefing-content" class="nl-container"></div>
+ <div id="Newsletter-content" class="nl-container"></div>
  </div>
 </section>
 
@@ -1868,7 +1868,7 @@
   async function fetchNlIssues() {
     if (!sb) { nlIssues = []; return; }
     const { data, error } = await sb
-      .from('Weekly Briefing_issues')
+      .from('newsletter_issues')
       .select('*')
       .order('issue', { ascending: false });
     if (error) { console.error('주간브리핑 로드 오류:', error); nlIssues = []; return; }
@@ -1891,16 +1891,16 @@
       articles: JSON.stringify(issueObj.articles), editorial: issueObj.editorial
     };
     if (issueObj.dbId) {
-      await sb.from('Weekly Briefing_issues').update(payload).eq('id', issueObj.dbId);
+      await sb.from('newsletter_issues').update(payload).eq('id', issueObj.dbId);
     } else {
-      var { data } = await sb.from('Weekly Briefing_issues').insert([payload]).select();
+      var { data } = await sb.from('newsletter_issues').insert([payload]).select();
       if (data && data[0]) issueObj.dbId = data[0].id;
     }
   }
 
   async function deleteNlIssue(issueObj) {
     if (!sb || !issueObj.dbId) return;
-    await sb.from('Weekly Briefing').delete().eq('id', issueObj.dbId);
+    await sb.from('newsletter').delete().eq('id', issueObj.dbId);
   }
 
   const typeMap = {
@@ -2137,9 +2137,9 @@
   }
 
   /* ── 프론트 렌더링: 최신호 펼침 + 과거호 아코디언 ── */
-  function renderWeekly Briefing() {
+  function renderNewsletter() {
     var issues = nlIssues;
-    const container = document.getElementById('Weekly Briefing-content');
+    const container = document.getElementById('Newsletter-content');
     if (!issues.length) {
       container.innerHTML = '<div class="nl-empty">발행된 주간브리핑가 없습니다.<br>관리자 패널(🔐)에서 주간브리핑를 발행해 주세요.</div>';
       return;
@@ -2220,7 +2220,7 @@
     currentIssueIdx = 0;
     populateIssueSelect();
     loadIssueToForm();
-    renderWeekly Briefing();
+    renderNewsletter();
     alert('✅ 제' + nextNum + '호가 생성되었습니다!');
   }
 
@@ -2234,7 +2234,7 @@
     populateIssueSelect();
     if (currentIssueIdx >= 0) loadIssueToForm();
     else document.getElementById('nlEditorArea').style.display = 'none';
-    renderWeekly Briefing();
+    renderNewsletter();
   }
 
   function populateIssueSelect() {
@@ -2274,7 +2274,7 @@
     nlIssues[currentIssueIdx].summary = document.getElementById('nlSummary').value.trim();
     await upsertNlIssue(nlIssues[currentIssueIdx]);
     populateIssueSelect();
-    renderWeekly Briefing();
+    renderNewsletter();
     alert('✅ 발행정보가 저장되었습니다!');
   }
 
@@ -2282,7 +2282,7 @@
     if (currentIssueIdx < 0) return;
     nlIssues[currentIssueIdx].editorial = document.getElementById('nlEditorial').value.trim();
     await upsertNlIssue(nlIssues[currentIssueIdx]);
-    renderWeekly Briefing();
+    renderNewsletter();
     alert('✅ 편집후기가 저장되었습니다!');
   }
 
@@ -2312,7 +2312,7 @@
     await upsertNlIssue(nlIssues[currentIssueIdx]);
     resetNlArticleForm();
     renderAdminNews();
-    renderWeekly Briefing();
+    renderNewsletter();
   }
 
   function editNlArticle(i) {
@@ -2357,7 +2357,7 @@
     await upsertNlIssue(nlIssues[currentIssueIdx]);
     if (editingArticleIdx === i) cancelNlArticleEdit();
     renderAdminNews();
-    renderWeekly Briefing();
+    renderNewsletter();
   }
 
   function renderAdminNews() {
@@ -2392,7 +2392,7 @@
     document.getElementById('adminOverlay').classList.remove('open');
     document.body.classList.remove('admin-mode');
     renderArch();
-    renderWeekly Briefing();
+    renderNewsletter();
   }
   function checkPw() {
     if (document.getElementById('pwInput').value === ADMIN_PW) {
@@ -2652,7 +2652,7 @@
     if (nlIssues.length) {
       currentIssueIdx = 0;
     }
-    renderWeekly Briefing();
+    renderNewsletter();
     populateIssueSelect();
     if (currentIssueIdx >= 0) loadIssueToForm();
     // 자료실 초기화
