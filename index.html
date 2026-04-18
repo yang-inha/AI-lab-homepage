@@ -2196,7 +2196,7 @@
   /* ── 프론트 렌더링: 최신호 펼침 + 과거호 아코디언 ── */
   function renderNewsletter() {
     var issues = nlIssues;
-    const container = document.getElementById('Newsletter-content');
+    const container = document.getElementById('newsletter-content');
     if (!issues.length) {
       container.innerHTML = '<div class="nl-empty">발행된 주간브리핑가 없습니다.<br>관리자 패널(🔐)에서 주간브리핑를 발행해 주세요.</div>';
       return;
