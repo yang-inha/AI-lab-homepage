@@ -52,10 +52,26 @@
     .logo-sub { font-size: 0.6rem; color: var(--cyan-light); letter-spacing: 0.06em; }
     .logo-name { font-family: 'Nanum Myeongjo', serif; font-size: 1rem; font-weight: 700; }
     nav ul { list-style: none; display: flex; gap: 0.3rem; }
-    nav a { color: rgba(255,255,255,0.8); padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.88rem; font-weight: 500; transition: all 0.2s; }
+    nav a { color: rgba(255,255,255,0.8); padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.88rem; font-weight: 500; transition: all 0.2s; cursor: pointer; }
     nav a:hover { color: #fff; background: rgba(0,139,139,0.3); }
+    nav a.active { color: #fff; background: rgba(0,139,139,0.45); }
     .nav-cta { background: var(--cyan) !important; color: #fff !important; border-radius: 20px !important; padding: 0.45rem 1.1rem !important; }
     .nav-cta:hover { background: var(--cyan-light) !important; }
+    /* SPA 섹션 토글 */
+    .spa-page { display: none; }
+    .spa-page.active { display: block; }
+    /* 참여신청 탭 */
+    .join-tabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; }
+    .join-tab { padding: 0.6rem 1.6rem; border-radius: 25px; border: 2px solid var(--cyan); background: #fff; color: var(--cyan); font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .join-tab.active, .join-tab:hover { background: var(--cyan); color: #fff; }
+    .join-panel { display: none; }
+    .join-panel.active { display: block; }
+    /* 햄버거 메뉴 */
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; z-index: 1001; }
+    .hamburger span { display: block; width: 24px; height: 2.5px; background: #fff; margin: 5px 0; border-radius: 2px; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
     /* ── HERO ── */
     #home {
@@ -352,7 +368,7 @@
     .detail-block h4 { font-family: 'Noto Sans KR', sans-serif; color: var(--navy); font-size: 0.84rem; margin-bottom: 0.35rem; }
     .detail-block p { color: var(--gray-600); font-size: 0.84rem; line-height: 1.75; white-space: pre-wrap; }
 
-    /* ── Weekly Briefing ── */
+    /* ── NEWSLETTER ── */
     #newsletter { background: #fff; }
     .nl-container { max-width: 760px; margin: 0 auto; }
     .nl-header {
@@ -878,9 +894,20 @@
     }
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      nav ul { display: none; }
+      nav ul { display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(0,22,48,0.98); flex-direction: column; padding: 1rem; gap: 0.3rem; border-bottom: 2px solid var(--cyan); }
+      nav ul.mobile-open { display: flex; }
+      nav a { padding: 0.7rem 1rem; font-size: 0.95rem; }
+      .hamburger { display: block; }
       .about-grid, .frow, .ft-top { grid-template-columns: 1fr; }
       .ft-bot { flex-direction: column; text-align: center; }
+      .val-grid { grid-template-columns: 1fr; }
+      .hero-content h1 { font-size: 1.6rem; }
+      .hero-content p { font-size: 0.95rem; }
+      .inner { padding-left: 1rem; padding-right: 1rem; }
+      .join-tabs { flex-direction: column; align-items: center; }
+      .sec-title { font-size: 1.5rem; }
+      .nav-inner { padding: 0 1rem; }
+      .team-grid { grid-template-columns: 1fr; }
     }
  </style>
 </head>
@@ -897,22 +924,23 @@
  </div>
  </div>
  <nav>
+ <button class="hamburger" onclick="toggleMobileMenu()" aria-label="메뉴">
+  <span></span><span></span><span></span>
+ </button>
  <ul>
- <li><a href="#greeting">소장 인사말</a></li>
- <li><a href="#about">연구소 소개</a></li>
- <li><a href="#services">주요 서비스</a></li>
- <li><a href="#rnd">연구 실적</a></li>
- <li><a href="#roadmap">로드맵</a></li>
- <li><a href="#archive">자료실</a></li>
- <li><a href="#newsletter">주간브리핑</a></li>
- <li><a href="#membership">회원 신청</a></li>
- <li><a href="#consult" class="nav-cta">자문 신청</a></li>
+ <li><a onclick="showPage('home')" class="active">홈</a></li>
+ <li><a onclick="showPage('intro')">연구소 소개</a></li>
+ <li><a onclick="showPage('research')">연구 서비스</a></li>
+ <li><a onclick="showPage('archive')">자료실</a></li>
+ <li><a onclick="showPage('newsletter')">주간브리핑</a></li>
+ <li><a onclick="showPage('join')" class="nav-cta">참여 신청</a></li>
  </ul>
  </nav>
  </div>
 </header>
 
-<!-- HERO -->
+<!-- SPA: 홈 -->
+<div id="page-home" class="spa-page active">
 <section id="home">
  <div class="hero-bg-grid"></div>
  <div class="hero-glow"></div>
@@ -933,13 +961,16 @@
  <div class="stat-item"><div class="stat-num">20년+</div><div class="stat-lbl">평균 실무 경력</div></div>
  </div>
  <div class="hero-btns">
- <a href="#about" class="btn-p">연구소 알아보기</a>
- <a href="#consult" class="btn-o">자문 신청하기</a>
+ <a onclick="showPage('intro')" class="btn-p" style="cursor:pointer;">연구소 알아보기</a>
+ <a onclick="showPage('join')" class="btn-o" style="cursor:pointer;">자문 신청하기</a>
  </div>
  </div>
  <div class="scroll-hint">▼ 스크롤</div>
 </section>
+</div>
 
+<!-- SPA: 연구소 소개 (인사말 + 소개) -->
+<div id="page-intro" class="spa-page">
 <!-- GREETING -->
 <section id="greeting">
  <div class="inner">
@@ -1092,7 +1123,10 @@
  </div>
  </div>
 </section>
+</div>
 
+<!-- SPA: 연구 서비스 (서비스 + 연구실적 + 로드맵) -->
+<div id="page-research" class="spa-page">
 <!-- SERVICES -->
 <section id="services">
  <div class="inner">
@@ -1262,7 +1296,10 @@
  </div>
  </div>
 </section>
+</div>
 
+<!-- SPA: 자료실 -->
+<div id="page-archive" class="spa-page">
 <!-- ARCHIVE -->
 <section id="archive">
  <div class="inner">
@@ -1287,85 +1324,43 @@
  <div id="arch-list" class="arch-list"></div>
  </div>
 </section>
+</div>
 
-<!-- Weekly Briefing -->
+<!-- SPA: 주간브리핑 -->
+<div id="page-newsletter" class="spa-page">
+<!-- NEWSLETTER -->
 <section id="newsletter">
  <div class="inner">
  <div class="sec-hd">
- <div class="sec-tag">Weekly Briefing</div>
- <h2 class="sec-title">주간브리핑</h2>
+ <div class="sec-tag">Newsletter</div>
+ <h2 class="sec-title">뉴스레터</h2>
  <p class="sec-desc">AI·빅데이터·관광·정책 분야 주요 동향을 매주 전합니다</p>
  <div class="divider"></div>
  </div>
  <div id="newsletter-content" class="nl-container"></div>
-<style>
-  #stb_subscribe, #stb_subscribe .stb_form { max-width: 700px !important; margin-left: auto !important; margin-right: auto !important; }
-  #stb_subscribe * { border: none !important; box-shadow: none !important; outline: none !important; }
-  #stb_subscribe .stb_form_set_input { border: 1px solid #ddd !important; }
-</style>
-    <link rel="stylesheet" href="https://resource.stibee.com/subscribe/stb_subscribe_form_style.css">
-      <div id="stb_subscribe">
-        
-        <form action="https://stibee.com/api/v1.0/lists/QqATNf0hSVpOheB75zo-ZDBM82w3ZA==/public/subscribers" method="POST" target="_blank" accept-charset="utf-8" class="stb_form" name="stb_subscribe_form" id="stb_subscribe_form" data-lang="" novalidate>
-          
-          <h1 class="stb_form_title">AI융합연구소 주간 브리핑 구독하기</h1>
-          
-          
-            <fieldset class="stb_form_set">
-              <label for="stb_email" class="stb_form_set_label">
-                이메일 주소<span class="stb_asterisk">*</span>
-              </label>
-              <input type="text" class="stb_form_set_input" id="stb_email" name="email" required="required">
-              <div class="stb_form_msg_error" id="stb_email_error"></div>
-            </fieldset>
-          
-  
-          
-  
-          
-            <div class="stb_form_policy">
-              <label>
-                <input type="checkbox" id="stb_policy" value="stb_policy_true">
-                <span>(필수)</span>
-                <button id="stb_form_modal_open" data-modal="stb_form_policy_modal" class="stb_form_modal_open_btn" type="button">개인정보 수집 및 이용</button>에 동의합니다.
-              </label>
-              <div class="stb_form_msg_error" id="stb_policy_error"></div>
-              <div class="stb_form_modal stb_form_policy_text blind" id="stb_form_policy_modal">
-                <div class="stb_form_modal_body">
-                  <h1 class="stb_form_modal_title">
-                    개인정보 수집 및 이용
-                  </h1>
-                  <div class="stb_form_modal_text">뉴스레터 발송을 위한 최소한의 개인정보를 수집하고 이용합니다.
-수집된 정보는 발송 외 다른 목적으로 이용되지 않으며, 서비스가 종료되거나 구독을 해지할 경우 즉시 파기됩니다.</div>
-                  <div class="stb_form_modal_btn">
-                    <button id="stb_form_modal_close" class="stb_form_modal_close_btn" data-modal="stb_form_policy_modal" type="button">닫기</button>
-                  </div>
-                </div>
-                <div class="stb_form_modal_bg" id="stb_form_modal_bg"></div>
-              </div>
-            </div>
-  
-          
-          <div class="stb_form_result" id="stb_form_result">
-          </div>
-  
-               
-            <fieldset class="stb_form_set_submit">
-              <button type="submit" class="stb_form_submit_button" id="stb_form_submit_button"
-                style="background-color: #FF6464; color: #FFFFFF;">구독하기</button>
-            </fieldset>
-          
-        </form>
-      </div>
-      <script type="text/javascript" src="https://resource.stibee.com/subscribe/stb_subscribe_form.js"></script>
-    
+ </div>
+</section>
 </div>
 
-</section>
-
+<!-- SPA: 참여 신청 (회원 + 자문 통합) -->
+<div id="page-join" class="spa-page">
+<section id="join-section">
+ <div class="inner">
+ <div class="sec-hd">
+ <div class="sec-tag">Join & Contact</div>
+ <h2 class="sec-title">참여 신청</h2>
+ <p class="sec-desc">회원 신청 또는 연구 자문 신청을 선택해 주세요</p>
+ <div class="divider"></div>
+ </div>
+ <div class="join-tabs">
+ <button class="join-tab active" onclick="switchJoinTab('member', this)">회원 신청</button>
+ <button class="join-tab" onclick="switchJoinTab('consult', this)">자문 신청</button>
+ </div>
+ <div id="joinMember" class="join-panel active">
+<!-- MEMBERSHIP 내용 시작 -->
 
 <!-- MEMBERSHIP -->
-<section id="membership">
+<div id="membership" style="padding-top:0;">
  <div class="inner">
  <div class="sec-hd">
  <div class="sec-tag">Membership & Partnership</div>
@@ -1554,26 +1549,15 @@
  <iframe name="membershipHiddenFrame" title="membership submission" style="display:none;"></iframe>
  </div>
  </div>
-</section>
-
-<div class="member-success-modal-overlay" id="memberSuccessModal" onclick="handleMemberSuccessOverlay(event)">
- <div class="member-success-modal">
-  <div class="member-success-modal-hd">
-   <h3>접수 완료</h3>
-   <button class="member-success-modal-close" type="button" onclick="closeMembershipSuccessModal()">✕</button>
-  </div>
-  <div class="member-success-modal-body">
-   <div class="member-success-badge">✅ 회원 신청 완료</div>
-   <p>회원 및 협력 신청이 정상적으로 접수되었습니다.<br />내용 검토 후 순차적으로 안내드리겠습니다.</p>
-   <div class="member-success-modal-actions">
-    <button type="button" class="member-success-ok-btn" onclick="closeMembershipSuccessModal()">확인</button>
-   </div>
-  </div>
- </div>
 </div>
 
+<!-- MEMBERSHIP 내용 끝 -->
+ </div><!-- joinMember 끝 -->
+
+ <div id="joinConsult" class="join-panel">
+<!-- CONSULT 내용 시작 -->
 <!-- CONSULT -->
-<section id="consult">
+<div id="consult">
  <div class="inner">
  <div class="consult-wrap">
  <div class="sec-hd">
@@ -1621,7 +1605,29 @@
  </div>
  </div>
  </div>
-</section>
+</div>
+<!-- CONSULT 내용 끝 -->
+ </div><!-- joinConsult 끝 -->
+ </div><!-- inner 끝 -->
+</section><!-- join-section 끝 -->
+</div><!-- page-join 끝 -->
+
+<!-- 회원신청 성공 모달 -->
+<div class="member-success-modal-overlay" id="memberSuccessModal" onclick="handleMemberSuccessOverlay(event)">
+ <div class="member-success-modal">
+  <div class="member-success-modal-hd">
+   <h3>접수 완료</h3>
+   <button class="member-success-modal-close" type="button" onclick="closeMembershipSuccessModal()">✕</button>
+  </div>
+  <div class="member-success-modal-body">
+   <div class="member-success-badge">✅ 회원 신청 완료</div>
+   <p>회원 및 협력 신청이 정상적으로 접수되었습니다.<br />내용 검토 후 순차적으로 안내드리겠습니다.</p>
+   <div class="member-success-modal-actions">
+    <button type="button" class="member-success-ok-btn" onclick="closeMembershipSuccessModal()">확인</button>
+   </div>
+  </div>
+ </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -1631,19 +1637,18 @@
  <div class="fn">사단법인 AI융합연구소</div>
  <p>기술(Tech)과 인문사회학(Context)의 진정한 결합으로<br>실사구시형 AI 연구를 추구합니다.<br>데이터 기반 의사결정 문화 정착과 지역 혁신 생태계 조성에 기여합니다.</p>
  <div class="addr">📍 제주특별자치도 제주시 이도일동 1289-18, 307호</div>
- <div class="addr">📞 010-4931-1855  |  ✉️ <a href="mailto:yangih71@gmail.com" class="email-link">yangih71@gmail.com</a>
+ <div class="addr">📞 010-4931-1855  |  ✉️ <a href="mailto:yangih71@gmail.com" class="email-link">yangih71@gmail.com</a></div>
  <div class="addr web">🌐 www.jejuailab.com</div>
  </div>
+
  <div class="ft-col">
  <h4>바로가기</h4>
  <ul>
- <li><a href="#about">연구소 소개</a></li>
- <li><a href="#services">주요 서비스</a></li>
- <li><a href="#rnd">연구 실적</a></li>
- <li><a href="#roadmap">성장 로드맵</a></li>
- <li><a href="#archive">자료실</a></li>
- <li><a href="#newsletter">주간브리핑</a></li>
- <li><a href="#consult">자문 신청</a></li>
+ <li><a onclick="showPage('intro')" style="cursor:pointer;">연구소 소개</a></li>
+ <li><a onclick="showPage('research')" style="cursor:pointer;">연구 서비스</a></li>
+ <li><a onclick="showPage('archive')" style="cursor:pointer;">자료실</a></li>
+ <li><a onclick="showPage('newsletter')" style="cursor:pointer;">주간브리핑</a></li>
+ <li><a onclick="showPage('join')" style="cursor:pointer;">참여 신청</a></li>
  </ul>
  </div>
  <div class="ft-col">
@@ -1692,7 +1697,7 @@
  <div class="admin-body">
  <div class="admin-tabs">
  <button class="admin-tab on" onclick="switchAdminTab('arch',this)">📂 자료실</button>
- <button class="admin-tab" onclick="switchAdminTab('news',this)">📰 주간브리핑</button>
+ <button class="admin-tab" onclick="switchAdminTab('news',this)">📰 뉴스레터</button>
  </div>
 
  <!-- 자료실 관리 -->
@@ -1778,10 +1783,10 @@
  <div id="adminArchList"></div>
  </div>
 
- <!-- 주간브리핑 관리 -->
+ <!-- 뉴스레터 관리 -->
  <div id="adminNews" class="admin-section">
  <div class="admin-form">
- <h3>📋 주간브리핑 호수 관리</h3>
+ <h3>📋 뉴스레터 호수 관리</h3>
  <div class="af-row">
  <div>
  <label>편집할 호 선택</label>
@@ -1810,7 +1815,7 @@
  </div>
  <div class="af-row af-full">
  <label>이번 호 요약</label>
- <textarea id="nlSummary" placeholder="이번 호 주간브리핑의 핵심 내용을 2~3문장으로 요약"></textarea>
+ <textarea id="nlSummary" placeholder="이번 호 뉴스레터의 핵심 내용을 2~3문장으로 요약"></textarea>
  </div>
  <button class="af-add-btn" onclick="saveNlMeta()">발행정보 저장</button>
  </div>
@@ -1900,8 +1905,50 @@
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  /* ── SPA 네비게이션 ── */
+  function showPage(pageId) {
+    // 모든 SPA 페이지 숨기기
+    document.querySelectorAll('.spa-page').forEach(function(p) { p.classList.remove('active'); });
+    // 선택된 페이지 보이기
+    var page = document.getElementById('page-' + pageId);
+    if (page) page.classList.add('active');
+    // nav 활성화 표시
+    document.querySelectorAll('nav a').forEach(function(a) { a.classList.remove('active'); });
+    var links = document.querySelectorAll('nav a');
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].getAttribute('onclick') && links[i].getAttribute('onclick').indexOf(pageId) > -1) {
+        links[i].classList.add('active');
+      }
+    }
+    // 스크롤 맨 위로
+    window.scrollTo(0, 0);
+    // 모바일 메뉴 닫기
+    var ul = document.querySelector('nav ul');
+    if (ul) ul.classList.remove('mobile-open');
+    var burger = document.querySelector('.hamburger');
+    if (burger) burger.classList.remove('open');
+  }
+
+  function toggleMobileMenu() {
+    var ul = document.querySelector('nav ul');
+    var burger = document.querySelector('.hamburger');
+    if (ul) ul.classList.toggle('mobile-open');
+    if (burger) burger.classList.toggle('open');
+  }
+
+  function switchJoinTab(tab, btn) {
+    document.querySelectorAll('.join-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.join-panel').forEach(function(p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    if (tab === 'member') {
+      document.getElementById('joinMember').classList.add('active');
+    } else {
+      document.getElementById('joinConsult').classList.add('active');
+    }
+  }
+
   const ADMIN_PW = '581558';
-  const NL_KEY = 'aijeju_Weekly Briefing';
+  const NL_KEY = 'aijeju_newsletter';
   const LEGACY_ARCH_KEY = 'aijeju_archive';
 
   // Supabase 연결 정보
@@ -1922,7 +1969,7 @@
   let archiveLoadError = '';
   let editingArchId = null;
 
-  // ── 주간브리핑: Supabase 연동 ──
+  // ── 뉴스레터: Supabase 연동 ──
   let nlIssues = []; // 메모리 캐시 (issue 내림차순)
   let currentIssueIdx = -1;
   let editingArticleIdx = -1;
@@ -1933,7 +1980,7 @@
       .from('newsletter_issues')
       .select('*')
       .order('issue', { ascending: false });
-    if (error) { console.error('주간브리핑 로드 오류:', error); nlIssues = []; return; }
+    if (error) { console.error('뉴스레터 로드 오류:', error); nlIssues = []; return; }
     nlIssues = (data || []).map(function(row) {
       var arts = [];
       try { arts = typeof row.articles === 'string' ? JSON.parse(row.articles) : (row.articles || []); } catch(e) {}
@@ -1962,7 +2009,7 @@
 
   async function deleteNlIssue(issueObj) {
     if (!sb || !issueObj.dbId) return;
-    await sb.from('newsletter').delete().eq('id', issueObj.dbId);
+    await sb.from('newsletter_issues').delete().eq('id', issueObj.dbId);
   }
 
   const typeMap = {
@@ -2203,7 +2250,7 @@
     var issues = nlIssues;
     const container = document.getElementById('newsletter-content');
     if (!issues.length) {
-      container.innerHTML = '<div class="nl-empty">발행된 주간브리핑가 없습니다.<br>관리자 패널(🔐)에서 주간브리핑를 발행해 주세요.</div>';
+      container.innerHTML = '<div class="nl-empty">발행된 뉴스레터가 없습니다.<br>관리자 패널(🔐)에서 뉴스레터를 발행해 주세요.</div>';
       return;
     }
     let html = '';
@@ -2230,7 +2277,7 @@
     let h = '';
     h += '<div class="nl-header">' +
       '<div class="nl-badge">📮 제' + nl.issue + '호</div>' +
-      '<h3>AI융합연구소 주간브리핑</h3>' +
+      '<h3>AI융합연구소 뉴스레터</h3>' +
       '<div class="nl-meta">' +
         '<span>📅 발행일: ' + escapeHtml(nl.date || '미정') + '</span>' +
         '<span>🏛️ ' + escapeHtml(nl.publisher || '사단법인 AI융합연구소') + '</span>' +
@@ -2709,7 +2756,7 @@
   });
 
   (async function initSite() {
-    // 주간브리핑: Supabase에서 로드
+    // 뉴스레터: Supabase에서 로드
     await fetchNlIssues();
     if (nlIssues.length) {
       currentIssueIdx = 0;
