@@ -894,20 +894,99 @@
     }
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
+      /* 네비게이션 */
       nav ul { display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(0,22,48,0.98); flex-direction: column; padding: 1rem; gap: 0.3rem; border-bottom: 2px solid var(--cyan); }
       nav ul.mobile-open { display: flex; }
       nav a { padding: 0.7rem 1rem; font-size: 0.95rem; }
       .hamburger { display: block; }
-      .about-grid, .frow, .ft-top { grid-template-columns: 1fr; }
-      .ft-bot { flex-direction: column; text-align: center; }
-      .val-grid { grid-template-columns: 1fr; }
-      .hero-content h1 { font-size: 1.6rem; }
-      .hero-content p { font-size: 0.95rem; }
+      .nav-inner { padding: 0 1rem; height: 60px; }
+      .logo img { height: 40px !important; }
+
+      /* 공통 */
       .inner { padding-left: 1rem; padding-right: 1rem; }
-      .join-tabs { flex-direction: column; align-items: center; }
-      .sec-title { font-size: 1.5rem; }
-      .nav-inner { padding: 0 1rem; }
+      section { padding: 3rem 0; }
+      .sec-title { font-size: 1.4rem; }
+      .sec-desc { font-size: 0.85rem; }
+      .sec-hd { margin-bottom: 2rem; }
+      .divider { width: 40px; }
+
+      /* 히어로 */
+      .hero-content h1 { font-size: 1.5rem; line-height: 1.4; }
+      .hero-content p { font-size: 0.9rem; }
+      .hero-badge { font-size: 0.68rem; padding: 0.35rem 0.8rem; }
+      .hero-btns { flex-direction: column; gap: 0.7rem; align-items: center; }
+      .hero-btns a { width: 80%; text-align: center; }
+      #home { min-height: 70vh; }
+
+      /* 인사말 */
+      .greeting-wrap { grid-template-columns: 1fr; }
+      .greeting-text blockquote { font-size: 0.95rem; }
+
+      /* 연구소 소개 */
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .val-grid { grid-template-columns: 1fr; }
+      .org-mid { flex-direction: column; align-items: center; }
+      .org-leaves { flex-direction: column; align-items: center; }
       .team-grid { grid-template-columns: 1fr; }
+      .m-card { padding: 1.2rem; }
+
+      /* 서비스 */
+      .svc-grid { grid-template-columns: 1fr; }
+      .svc-card { padding: 1.4rem 1.2rem; }
+
+      /* 연구실적 */
+      .rnd-grid { grid-template-columns: 1fr; }
+
+      /* 로드맵 */
+      .phases { grid-template-columns: 1fr; }
+
+      /* 자료실 */
+      .arch-tabs { gap: 0.3rem; }
+      .atab { font-size: 0.75rem; padding: 0.35rem 0.7rem; }
+
+      /* 주간브리핑 */
+      .nl-container { padding: 0 0.5rem; }
+      .nl-header { padding: 1.5rem 1.2rem; border-radius: 12px; }
+      .nl-header h3 { font-size: 1.1rem; }
+      .nl-meta { flex-direction: column; gap: 0.3rem; }
+      .nl-article { padding: 1.2rem; }
+      .nl-summary { padding: 1rem 1.2rem; }
+      .nl-editorial { padding: 1.4rem 1.2rem; }
+      .nl-acc-toggle { padding: 0.8rem 1rem; font-size: 0.82rem; }
+
+      /* 참여신청 */
+      .join-tabs { flex-direction: column; align-items: center; }
+      .join-tab { width: 80%; text-align: center; }
+      .member-type-grid { grid-template-columns: 1fr; }
+      .member-type-card { padding: 1.5rem; }
+      .member-guide-box { font-size: 0.82rem; padding: 1rem; }
+      .frow { grid-template-columns: 1fr; }
+      .consult-wrap { padding: 0 0.5rem; }
+
+      /* 폼 */
+      .member-form-wrap { margin: 1rem; padding: 1.5rem 1rem; }
+      .member-form-head h3 { font-size: 1.1rem; }
+      .af-row { grid-template-columns: 1fr; }
+
+      /* 푸터 */
+      .ft-top { grid-template-columns: 1fr; }
+      .ft-bot { flex-direction: column; text-align: center; gap: 0.5rem; }
+      .ft-brand { text-align: center; }
+      .ft-col { text-align: center; }
+
+      /* 관리자 패널 */
+      .admin-panel { width: 95%; margin: 1rem; }
+      .admin-tabs { flex-wrap: wrap; }
+    }
+
+    /* 태블릿 중간 크기 */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .nav-inner { padding: 0 1.5rem; }
+      nav a { font-size: 0.8rem; padding: 0.4rem 0.6rem; }
+      .about-grid { gap: 2rem; }
+      .svc-grid { grid-template-columns: repeat(2, 1fr); }
+      .member-type-grid { grid-template-columns: repeat(2, 1fr); }
+      .phases { grid-template-columns: repeat(2, 1fr); }
     }
  </style>
 </head>
