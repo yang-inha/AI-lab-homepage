@@ -2089,6 +2089,23 @@
     if (burger) burger.classList.remove('open');
   }
 
+  // URL 해시(#newsletter 등)로 직접 접근 시 해당 페이지 자동 열기
+  (function() {
+    var hashMap = {
+      '#home': 'home',
+      '#intro': 'intro',
+      '#research': 'research',
+      '#archive': 'archive',
+      '#newsletter': 'newsletter',
+      '#join': 'join',
+      '#consult': 'join'
+    };
+    var hash = window.location.hash;
+    if (hash && hashMap[hash]) {
+      showPage(hashMap[hash]);
+    }
+  })();
+
   function toggleMobileMenu() {
     var ul = document.querySelector('nav ul');
     var burger = document.querySelector('.hamburger');
