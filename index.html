@@ -5,28 +5,29 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>사단법인 AI융합연구소 | 데이터로 제주의 내일을 설계하다</title>
  <link rel="preconnect" href="https://fonts.googleapis.com">
- <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
  <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --navy: #003366;
-      --navy-dark: #001e3c;
-      --navy-mid: #0a4a8a;
-      --cyan: #008B8B;
-      --cyan-light: #00b5b5;
-      --cyan-pale: #e0f5f5;
+      /* 제주 현무암·감귤 팔레트로 통일 (주간브리핑·자료실과 동일 톤) */
+      --navy: #1C1F1D;        /* 현무암 */
+      --navy-dark: #101312;   /* 짙은 현무암 */
+      --navy-mid: #0F6E5C;    /* 제주 바다 (보조 강조색) */
+      --cyan: #E8792F;        /* 감귤 (메인 강조색) */
+      --cyan-light: #F2A467;  /* 밝은 감귤 */
+      --cyan-pale: #FBE7D8;   /* 옅은 감귤 */
       --white: #ffffff;
-      --gray-50: #f9fafb;
-      --gray-100: #f3f4f6;
-      --gray-200: #e5e7eb;
+      --gray-50: #F7F4EC;     /* 한지 배경 */
+      --gray-100: #EFEAdd;
+      --gray-200: #e5e2d8;
       --gray-400: #9ca3af;
-      --gray-600: #6b7280;
+      --gray-600: #8A8579;    /* 돌담 회색 */
       --gray-800: #1f2937;
-      --text: #111827;
+      --text: #2B2B26;
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'Noto Sans KR', sans-serif; color: var(--text); background: #fff; line-height: 1.7; }
-    h1, h2, h3 { font-family: 'Nanum Myeongjo', serif; }
+    h1, h2, h3 { font-family: 'Noto Serif KR', serif; }
     a { text-decoration: none; color: inherit; }
 
     /* ── HEADER ── */
@@ -50,7 +51,7 @@
       font-weight: 800; font-size: 0.9rem; color: #fff; letter-spacing: -0.03em;
     }
     .logo-sub { font-size: 0.6rem; color: var(--cyan-light); letter-spacing: 0.06em; }
-    .logo-name { font-family: 'Nanum Myeongjo', serif; font-size: 1rem; font-weight: 700; }
+    .logo-name { font-family: 'Noto Serif KR', serif; font-size: 1rem; font-weight: 700; }
     nav ul { list-style: none; display: flex; gap: 0.3rem; }
     nav a { color: rgba(255,255,255,0.8); padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.88rem; font-weight: 500; transition: all 0.2s; cursor: pointer; }
     nav a:hover { color: #fff; background: rgba(0,139,139,0.3); }
@@ -66,6 +67,34 @@
     .join-tab.active, .join-tab:hover { background: var(--cyan); color: #fff; }
     .join-panel { display: none; }
     .join-panel.active { display: block; }
+    /* 범용 서브탭 (연구소소개/연구서비스/미디어룸/문의신청 공통) */
+    .subtabs { display: flex; gap: 0.5rem; justify-content: center; margin: 0 0 3rem; flex-wrap: wrap; padding-top: 2.2rem; }
+    .subtab { padding: 0.6rem 1.5rem; border-radius: 25px; border: 2px solid var(--cyan); background: #fff; color: var(--cyan); font-size: 0.86rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .subtab.active, .subtab:hover { background: var(--cyan); color: #fff; }
+    .subtab-panel { display: none; }
+    .subtab-panel.active { display: block; }
+    @media (max-width: 768px) { .subtabs { flex-direction: column; align-items: center; } .subtab { width: 85%; text-align: center; } }
+    /* 성장 로드맵 - 화살표형 인포그래픽 */
+    .roadmap-arrows { display: flex; flex-wrap: wrap; gap: 0; margin-bottom: 2.5rem; }
+    .rm-arrow {
+      position: relative; flex: 1; min-width: 220px; color: #fff;
+      padding: 1.4rem 2.2rem 1.4rem 1.6rem;
+      clip-path: polygon(0 0, 88% 0, 100% 50%, 88% 100%, 0 100%, 10% 50%);
+      margin-right: -14px; display: flex; flex-direction: column; gap: 0.3rem;
+      align-items: center; text-align: center;
+    }
+    .rm-arrow:first-child { clip-path: polygon(0 0, 88% 0, 100% 50%, 88% 100%, 0 100%); }
+    .rm-ph { font-size: 0.72rem; opacity: 0.75; letter-spacing: 0.06em; }
+    .rm-tt { font-family: 'Noto Serif KR', serif; font-size: 1.05rem; font-weight: 700; }
+    @media (max-width: 820px) { .roadmap-arrows { flex-direction: column; } .rm-arrow { clip-path: none !important; border-radius: 8px; margin-right: 0; margin-bottom: 8px; } }
+    /* 미디어룸 카드 */
+    .media-card { display: flex; gap: 1rem; align-items: flex-start; background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; padding: 1.3rem 1.5rem; margin-bottom: 0.9rem; }
+    .media-thumb { width: 52px; height: 52px; border-radius: 8px; background: var(--cyan-pale); flex-shrink: 0; }
+    .media-card h4 { font-size: 0.98rem; font-weight: 700; color: var(--navy); margin-bottom: 0.35rem; }
+    .media-card .src { font-size: 0.78rem; color: var(--gray-600); }
+    .book-card { display: flex; gap: 1.6rem; align-items: center; background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; padding: 1.8rem; }
+    .book-cover { width: 96px; height: 130px; border-radius: 6px; background: linear-gradient(160deg, var(--cyan), var(--navy)); flex-shrink: 0; }
+    .media-empty { text-align: center; color: var(--gray-600); font-size: 0.88rem; padding: 2.5rem 1rem; border: 1px dashed var(--gray-200); border-radius: 10px; }
     /* 햄버거 메뉴 */
     .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; z-index: 1001; }
     .hamburger span { display: block; width: 24px; height: 2.5px; background: #fff; margin: 5px 0; border-radius: 2px; transition: all 0.3s; }
@@ -103,7 +132,7 @@
       line-height: 1.45; margin-bottom: 1rem;
     }
     .hero-subtitle {
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: clamp(1rem, 2vw, 1.3rem); color: rgba(255,255,255,0.6);
       margin-bottom: 1.5rem; font-weight: 400;
     }
@@ -124,7 +153,7 @@
       background: rgba(255,255,255,0.07); border: 1px solid rgba(0,139,139,0.4);
       border-radius: 14px; padding: 1.1rem 1.6rem; text-align: center; min-width: 120px;
     }
-    .stat-num { font-family: 'Nanum Myeongjo', serif; font-size: 1.9rem; font-weight: 800; color: var(--cyan-light); }
+    .stat-num { font-family: 'Noto Serif KR', serif; font-size: 1.9rem; font-weight: 800; color: var(--cyan-light); }
     .stat-lbl { font-size: 0.74rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
     .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
     .btn-p {
@@ -175,7 +204,7 @@
       border-radius: 50%;
       margin: 0 auto 1.2rem;
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 3rem; font-weight: 800; color: #fff;
       border: 5px solid var(--cyan-pale);
       box-shadow: 0 8px 32px rgba(0,51,102,0.15);
@@ -183,7 +212,7 @@
     .greeting-name-ko { font-size: 1.2rem; font-weight: 700; color: var(--navy); }
     .greeting-title { font-size: 0.82rem; color: var(--cyan); font-weight: 600; margin-top: 0.3rem; }
     .greeting-text blockquote {
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 1.15rem; font-style: italic;
       color: var(--navy); border-left: 4px solid var(--cyan);
       padding-left: 1.4rem; margin-bottom: 1.5rem; line-height: 1.7;
@@ -194,7 +223,7 @@
     }
     .greeting-sign {
       margin-top: 1.5rem; text-align: right;
-      font-family: 'Nanum Myeongjo', serif;
+      font-family: 'Noto Serif KR', serif;
       font-size: 0.95rem; color: var(--navy);
     }
     .greeting-sign strong { font-size: 1.05rem; }
@@ -205,8 +234,8 @@
 
     /* ── ABOUT ── */
     #about { background: var(--gray-50); }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
-    .about-left h3 { font-family: 'Nanum Myeongjo', serif; font-size: 1.15rem; color: var(--navy); margin-bottom: 0.7rem; padding-bottom: 0.45rem; border-bottom: 2px solid var(--cyan); display: inline-block; }
+    .about-grid { display: grid; grid-template-columns: 1fr; max-width: 820px; margin: 0 auto; align-items: start; }
+    .about-left h3 { font-family: 'Noto Serif KR', serif; font-size: 1.15rem; color: var(--navy); margin-bottom: 0.7rem; padding-bottom: 0.45rem; border-bottom: 2px solid var(--cyan); display: inline-block; }
     .about-left p { color: var(--gray-600); font-size: 0.93rem; margin-bottom: 1.4rem; }
     .val-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; margin-top: 1.5rem; }
     .val-card { background: #fff; border: 1px solid var(--gray-200); border-left: 3px solid var(--cyan); border-radius: 12px; padding: 1.1rem; transition: all 0.2s; }
@@ -225,9 +254,10 @@
     .org-dept { background: var(--cyan-pale); border: 1.5px solid var(--cyan); color: var(--cyan); padding: 0.45rem 0.85rem; border-radius: 8px; font-size: 0.78rem; font-weight: 700; }
     .org-leaves { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-top: 0.9rem; }
     .org-leaf { background: var(--gray-100); border: 1px solid var(--gray-200); color: var(--gray-800); padding: 0.28rem 0.65rem; border-radius: 20px; font-size: 0.72rem; }
-    .contact-info { margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--gray-200); }
-    .contact-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--gray-600); margin-bottom: 0.4rem; }
+    .contact-info { margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--gray-200); display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 2.2rem; justify-items: center; max-width: 640px; margin-left: auto; margin-right: auto; }
+    .contact-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--gray-600); margin-bottom: 0; }
     .contact-row strong { color: var(--gray-800); }
+    @media (max-width: 640px) { .contact-info { grid-template-columns: 1fr; } }
     .map-btn { display: inline-block; margin-top: 0.6rem; background: var(--cyan-pale); border: 1px solid var(--cyan); color: var(--cyan); padding: 0.3rem 0.9rem; border-radius: 20px; font-size: 0.74rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
     .map-btn:hover { background: var(--cyan); color: #fff; }
 
@@ -245,7 +275,7 @@
       background: linear-gradient(135deg, var(--navy), var(--cyan));
       border-radius: 50%; margin: 0 auto 1rem;
       display: flex; align-items: center; justify-content: center;
-      color: #fff; font-family: 'Nanum Myeongjo', serif; font-size: 1.25rem; font-weight: 700;
+      color: #fff; font-family: 'Noto Serif KR', serif; font-size: 1.25rem; font-weight: 700;
     }
     .m-badge { display: inline-block; background: var(--navy); color: #fff; font-size: 0.62rem; font-weight: 700; padding: 0.12rem 0.5rem; border-radius: 10px; margin-bottom: 0.5rem; }
     .m-name { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem; }
@@ -275,7 +305,7 @@
       padding: 1.7rem; transition: all 0.25s;
     }
     .rnd-card:hover { box-shadow: 0 6px 24px rgba(0,51,102,0.09); transform: translateY(-2px); }
-    .rnd-num { font-family: 'Nanum Myeongjo', serif; font-size: 2rem; font-weight: 800; color: var(--gray-200); margin-bottom: 0.6rem; }
+    .rnd-num { font-family: 'Noto Serif KR', serif; font-size: 2rem; font-weight: 800; color: var(--gray-200); margin-bottom: 0.6rem; }
     .rnd-card h3 { font-family: 'Noto Sans KR', sans-serif; font-size: 0.92rem; font-weight: 700; color: var(--navy); margin-bottom: 0.7rem; }
     .rnd-card p { font-size: 0.82rem; color: var(--gray-600); line-height: 1.65; margin-bottom: 0.9rem; }
     .rnd-by { font-size: 0.74rem; color: var(--cyan); font-weight: 600; }
@@ -300,7 +330,7 @@
     }
     .phase:hover { background: rgba(255,255,255,0.11); border-color: var(--cyan-light); }
     .phase-label { font-size: 0.72rem; color: var(--cyan-light); font-weight: 700; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
-    .phase-year { font-family: 'Nanum Myeongjo', serif; font-size: 1.7rem; font-weight: 800; color: #fff; margin-bottom: 0.3rem; }
+    .phase-year { font-family: 'Noto Serif KR', serif; font-size: 1.7rem; font-weight: 800; color: #fff; margin-bottom: 0.3rem; }
     .phase-name { font-size: 0.95rem; font-weight: 700; color: var(--cyan-light); margin-bottom: 1rem; }
     .phase ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
     .phase li { font-size: 0.83rem; color: rgba(255,255,255,0.75); padding-left: 1rem; position: relative; }
@@ -311,7 +341,7 @@
       border-radius: 16px; padding: 2rem;
     }
     .revenue-box p { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem; }
-    .revenue-box .big { font-family: 'Nanum Myeongjo', serif; font-size: 2.2rem; font-weight: 800; color: var(--cyan-light); }
+    .revenue-box .big { font-family: 'Noto Serif KR', serif; font-size: 2.2rem; font-weight: 800; color: var(--cyan-light); }
     .revenue-box .sub { font-size: 0.82rem; color: rgba(255,255,255,0.6); margin-top: 0.5rem; }
 
     /* ── ARCHIVE ── */
@@ -324,18 +354,23 @@
     .arch-tabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1.8rem; flex-wrap: wrap; }
     .atab { padding: 0.45rem 1.2rem; border-radius: 20px; font-size: 0.83rem; font-weight: 600; border: 2px solid var(--gray-200); background: #fff; cursor: pointer; transition: all 0.2s; color: var(--gray-600); font-family: 'Noto Sans KR', sans-serif; }
     .atab.on, .atab:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
-    .arch-list { display: flex; flex-direction: column; gap: 1rem; }
-    .arch-item { background: #fff; border-radius: 14px; padding: 1.25rem 1.35rem; border: 1px solid var(--gray-200); transition: all 0.2s; }
-    .arch-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); border-color: var(--cyan); }
+    .arch-list { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 780px) { .arch-list { grid-template-columns: 1fr; } }
+    .arch-item { background: #fff; border-radius: 10px; padding: 1.25rem 1.35rem; border: 1px solid var(--gray-200); border-left: 6px solid var(--gray-400); transition: all 0.2s; }
+    .arch-item:hover { box-shadow: 0 10px 26px rgba(0,0,0,0.08); transform: translateY(-2px); border-color: var(--gray-200); }
+    .arch-item[data-type="report"] { border-left-color: var(--navy-mid); }
+    .arch-item[data-type="paper"]  { border-left-color: var(--navy); }
+    .arch-item[data-type="policy"] { border-left-color: var(--cyan); }
     .arch-top { display: flex; align-items: flex-start; gap: 1rem; }
-    .atype { min-width: 58px; text-align: center; padding: 0.28rem 0; font-size: 0.7rem; font-weight: 700; border-radius: 6px; }
-    .t-rep { background: #eff6ff; color: #2563eb; }
-    .t-pap { background: #fefce8; color: #ca8a04; }
-    .t-pol { background: #f0fdf4; color: #16a34a; }
+    .atype { min-width: 58px; text-align: center; padding: 0.28rem 0; font-size: 0.7rem; font-weight: 700; border-radius: 20px; }
+    .t-rep { background: rgba(15,110,92,0.12); color: var(--navy-mid); }
+    .t-pap { background: rgba(28,31,29,0.08); color: var(--navy); }
+    .t-pol { background: var(--cyan-pale); color: #C85F1C; }
     .ainfo { flex: 1; min-width: 0; }
     .ainfo h4 { font-family: 'Noto Sans KR', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 0.25rem; line-height: 1.5; }
     .ainfo .meta { font-size: 0.76rem; color: var(--gray-400); display: block; margin-bottom: 0.55rem; }
     .ainfo .summary { font-size: 0.82rem; color: var(--gray-600); line-height: 1.65; }
+    .arch-self-badge { display: inline-block; font-size: 0.68rem; font-weight: 700; color: #C85F1C; margin-bottom: 0.3rem; }
     .arch-actions { display: flex; gap: 0.55rem; flex-wrap: wrap; margin-top: 0.95rem; }
     .arch-btn, .arch-link {
       display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem;
@@ -376,7 +411,7 @@
       border-radius: 18px; padding: 2.2rem 2rem; margin-bottom: 2rem; text-align: center;
       border: 1px solid rgba(0,181,181,0.3);
     }
-    .nl-header h3 { font-family: 'Nanum Myeongjo', serif; font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 0.6rem; }
+    .nl-header h3 { font-family: 'Noto Serif KR', serif; font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 0.6rem; }
     .nl-meta { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
     .nl-meta span { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
     .nl-summary {
@@ -411,7 +446,7 @@
       border: 1px solid var(--gray-200); border-radius: 16px;
       padding: 1.8rem 2rem; margin-top: 2rem;
     }
-    .nl-editorial h4 { font-family: 'Nanum Myeongjo', serif; font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.8rem; }
+    .nl-editorial h4 { font-family: 'Noto Serif KR', serif; font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.8rem; }
     .nl-editorial p { font-size: 0.88rem; color: var(--gray-600); line-height: 1.85; }
     .nl-editorial .nl-sign { text-align: right; margin-top: 1rem; font-size: 0.82rem; color: var(--navy); font-weight: 600; }
     .nl-empty { text-align: center; padding: 3rem; color: var(--gray-400); font-size: 0.88rem; border: 2px dashed var(--gray-200); border-radius: 12px; }
@@ -421,26 +456,33 @@
       color: var(--cyan-light); padding: 0.3rem 0.9rem; border-radius: 16px;
       font-size: 0.72rem; letter-spacing: 0.06em; margin-bottom: 1rem;
     }
-    /* 아코디언 (과거호) */
-    .nl-accordion { margin-bottom: 1rem; border: 1px solid var(--gray-200); border-radius: 14px; overflow: hidden; }
+    /* 아코디언 (과거호) - 카드형 미리보기 */
+    .nl-accordion { margin-bottom: 0.9rem; border: 1px solid var(--gray-200); border-radius: 12px; overflow: hidden; transition: box-shadow 0.2s, border-color 0.2s; }
+    .nl-accordion:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.06); border-color: var(--cyan); }
     .nl-acc-toggle {
-      width: 100%; background: var(--gray-50); border: none; cursor: pointer;
-      padding: 1rem 1.4rem; display: flex; align-items: center; justify-content: space-between;
+      width: 100%; background: #fff; border: none; cursor: pointer;
+      padding: 1.1rem 1.4rem; display: flex; align-items: center; gap: 1rem; text-align: left;
       font-family: 'Noto Sans KR', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--navy);
       transition: background 0.2s;
     }
     .nl-acc-toggle:hover { background: var(--cyan-pale); }
-    .nl-acc-toggle .nl-acc-arrow { transition: transform 0.3s; font-size: 0.8rem; color: var(--gray-400); }
+    .nl-issue-label {
+      flex-shrink: 0; font-family: 'Noto Serif KR', serif; font-size: 0.78rem; font-weight: 800;
+      color: var(--cyan-deep, var(--navy)); background: var(--cyan-pale); border: 1px solid var(--cyan);
+      padding: 0.3rem 0.7rem; border-radius: 6px; letter-spacing: 0.02em;
+    }
+    .nl-acc-toggle > span:not(.nl-issue-label):not(.nl-acc-arrow) { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; color: var(--gray-800); }
+    .nl-acc-toggle .nl-acc-arrow { transition: transform 0.3s; font-size: 0.8rem; color: var(--gray-400); flex-shrink: 0; }
     .nl-acc-toggle.open .nl-acc-arrow { transform: rotate(180deg); }
-    .nl-acc-body { display: none; padding: 0 1.4rem 1.4rem; }
-    .nl-acc-body.open { display: block; }
+    .nl-acc-body { display: none; padding: 0 1.4rem 1.4rem; border-top: 1px solid var(--gray-200); }
+    .nl-acc-body.open { display: block; padding-top: 1.2rem; }
     .nl-issue-label {
       display: inline-block; background: var(--navy); color: #fff; font-size: 0.68rem;
       font-weight: 700; padding: 0.15rem 0.6rem; border-radius: 10px; margin-right: 0.5rem;
     }
 
     /* ── CONSULT ── */
-    #consult { background: linear-gradient(155deg, var(--navy-dark), var(--navy)); }
+    #consult, #project { background: linear-gradient(155deg, var(--navy-dark), var(--navy)); }
     .consult-wrap { max-width: 700px; margin: 0 auto; }
     .consult-wrap .sec-tag { color: var(--cyan-light); }
     .consult-wrap .sec-title { color: #fff; }
@@ -470,7 +512,7 @@
     footer { background: #000f1e; color: rgba(255,255,255,0.6); padding: 3rem 2rem 2rem; }
     .ft-inner { max-width: 1200px; margin: 0 auto; }
     .ft-top { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 1.5rem; }
-    .ft-brand .fn { font-family: 'Nanum Myeongjo', serif; font-size: 1.05rem; color: #fff; margin-bottom: 0.4rem; }
+    .ft-brand .fn { font-family: 'Noto Serif KR', serif; font-size: 1.05rem; color: #fff; margin-bottom: 0.4rem; }
     .ft-brand p { font-size: 0.8rem; line-height: 1.85; }
     .ft-brand .addr { font-size: 0.8rem; margin-top: 0.6rem; }
     .ft-brand .web { color: var(--cyan-light); font-size: 0.78rem; }
@@ -560,7 +602,7 @@
     .af-cancel-btn:hover { border-color: var(--gray-400); color: var(--gray-800); }
     .af-cancel-btn.show { display: inline-flex; }
     .pw-panel { padding: 2rem; text-align: center; }
-    .pw-panel h3 { font-family: 'Nanum Myeongjo', serif; color: var(--navy); margin-bottom: 0.5rem; }
+    .pw-panel h3 { font-family: 'Noto Serif KR', serif; color: var(--navy); margin-bottom: 0.5rem; }
     .pw-panel p { font-size: 0.83rem; color: var(--gray-600); margin-bottom: 1.2rem; }
     .pw-input { padding: 0.75rem 1.1rem; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 0.95rem; font-family: 'Noto Sans KR', sans-serif; outline: none; text-align: center; letter-spacing: 0.1em; width: 220px; margin-bottom: 1rem; }
     .pw-input:focus { border-color: var(--cyan); }
@@ -1010,7 +1052,8 @@
  <li><a onclick="showPage('research')">연구 서비스</a></li>
  <li><a onclick="showPage('archive')">자료실</a></li>
  <li><a onclick="showPage('newsletter')">주간브리핑</a></li>
- <li><a onclick="showPage('join')" class="nav-cta">참여 신청</a></li>
+ <li><a onclick="showPage('media')">미디어룸</a></li>
+ <li><a onclick="showPage('join')" class="nav-cta">문의·신청</a></li>
  </ul>
  </nav>
  </div>
@@ -1038,8 +1081,8 @@
  <div class="stat-item"><div class="stat-num">20년+</div><div class="stat-lbl">평균 실무 경력</div></div>
  </div>
  <div class="hero-btns">
- <a onclick="showPage('intro')" class="btn-p" style="cursor:pointer;">연구소 알아보기</a>
- <a onclick="showPage('join')" class="btn-o" style="cursor:pointer;">자문 신청하기</a>
+ <a onclick="showPage('intro')" class="btn-p" style="cursor:pointer;">연구소 소개</a>
+ <a onclick="showPage('join')" class="btn-o" style="cursor:pointer;">문의·신청하기</a>
  </div>
  </div>
  <div class="scroll-hint">▼ 스크롤</div>
@@ -1048,8 +1091,14 @@
 
 <!-- SPA: 연구소 소개 (인사말 + 소개) -->
 <div id="page-intro" class="spa-page">
+<div class="subtabs" data-panels="greeting,about-found,org,roadmap">
+ <button class="subtab active" data-target="greeting" onclick="switchTab(this)">소장 인사말</button>
+ <button class="subtab" data-target="about-found" onclick="switchTab(this)">설립배경과 설립목적</button>
+ <button class="subtab" data-target="org" onclick="switchTab(this)">조직도 및 기본정보</button>
+ <button class="subtab" data-target="roadmap" onclick="switchTab(this)">성장 로드맵</button>
+</div>
 <!-- GREETING -->
-<section id="greeting">
+<section id="greeting" class="subtab-panel active">
  <div class="inner">
  <div class="sec-hd">
  <div class="sec-tag">Director's Message</div>
@@ -1079,7 +1128,7 @@
           특히 제주 지역의 R&D 생태계가 특정 기관에 편중되지 않도록, 민간 고유의 기동성과 현장성을 바탕으로 지역 혁신을 이끄는 <strong>민간 싱크탱크</strong>로 성장해 나가겠습니다. 공공기관, 기업, 그리고 지역 사회와 함께 데이터 기반의 과학적 의사결정 문화를 만들어 가는 여정에 여러분을 초대합니다.
  </p>
  <br>
- <h3 style="font-family:'Nanum Myeongjo',serif; font-size:1.15rem; color:var(--navy); margin-bottom:1rem;">그릇이 되겠다</h3>
+ <h3 style="font-family:'Noto Serif KR',serif; font-size:1.15rem; color:var(--navy); margin-bottom:1rem;">그릇이 되겠다</h3>
  <p>
       한 사피엔스가 30대 이후 어떤 분야에서 20년을 살아냈다면, 그 사람은 그 분야의 전문가입니다. 학력, 직업, 재력은 상관없습니다. 50년의 인생에는 기록이 있고, 삶의 통찰이 있습니다.
  </p>
@@ -1101,12 +1150,12 @@
  </div>
 </section>
 
-<!-- ABOUT -->
-<section id="about">
+<!-- ABOUT: 설립배경과 설립목적 -->
+<section id="about-found" class="subtab-panel">
  <div class="inner">
  <div class="sec-hd">
  <div class="sec-tag">About Us</div>
- <h2 class="sec-title">연구소 소개</h2>
+ <h2 class="sec-title">설립배경과 설립목적</h2>
  <p class="sec-desc">이공계와 인문사회계 박사가 융합된 집단지성</p>
  <div class="divider"></div>
  </div>
@@ -1128,7 +1177,18 @@
  <div class="val-card"><div class="val-icon">🌊</div><h4>제주 특화 연구</h4><p>지역 현안 해결 및 지식 산업 생태계 조성</p></div>
  </div>
  </div>
+ </div>
+ </div>
+</section>
 
+<!-- ORG: 조직도 및 기본정보 -->
+<section id="org" class="subtab-panel">
+ <div class="inner">
+ <div class="sec-hd">
+ <div class="sec-tag">Organization</div>
+ <h2 class="sec-title">조직도 및 기본정보</h2>
+ <div class="divider"></div>
+ </div>
  <div class="org-box">
  <h3>📋 법인  조직도 및 기본 정보</h3>
  <div class="org-tree">
@@ -1152,78 +1212,72 @@
  <div class="contact-row">✉️ <strong>이메일</strong> <a href="mailto:yangih71@gmail.com" class="email-link">yangih71@gmail.com</a></div>
  <div class="contact-row">🌐 <strong>홈페이지</strong> <span class="web">www.jejuailab.com</span></div>
  <div class="contact-row">👤 <strong>담당자</strong> 김대훈 이사 · 010-4931-1855</div>
- <a href="https://map.kakao.com" target="_blank" class="map-btn">🗺️ 카카오맵으로 보기</a>
  </div>
  </div>
  </div>
+</section>
 
- <!-- 전문 인력 -->
- <div class="team-wrap">
+<!-- ROADMAP: 성장 로드맵 (연구서비스에서 이동, 화살표형 인포그래픽) -->
+<section id="roadmap" class="subtab-panel">
+ <div class="inner">
  <div class="sec-hd">
- <div class="sec-tag">Our Team</div>
- <h2 class="sec-title">분야별 전문 인력 구성</h2>
- <p class="sec-desc">박사 학위 소지자 100% · 이공계 + 인문사회 융합</p>
+ <div class="sec-tag">Growth Roadmap</div>
+ <h2 class="sec-title">성장 로드맵</h2>
+ <p class="sec-desc">2030년 제주 대표 민간 싱크탱크로 도약</p>
  <div class="divider"></div>
  </div>
- <div class="team-grid">
- <div class="member">
- <div class="m-avatar">양</div>
- <span class="m-badge">Ph.D · 경영학</span>
- <div class="m-name">양인하</div>
- <div class="m-field">빅데이터 / 경영 · 대표</div>
- <div class="m-univ">제주대학교</div>
- <div class="m-desc">뉴스 심리지수(NPI) 개발<br>관광 수요 예측 모형 연구<br>한국능률협회 위원</div>
+ <div class="roadmap-arrows">
+ <div class="rm-arrow" style="background:var(--navy)"><span class="rm-ph">PHASE 1 · 2026</span><span class="rm-tt">연구 · 모델 개발</span></div>
+ <div class="rm-arrow" style="background:var(--cyan)"><span class="rm-ph">PHASE 2 · 2027</span><span class="rm-tt">시범 적용</span></div>
+ <div class="rm-arrow" style="background:var(--navy-mid)"><span class="rm-ph">PHASE 3 · 2028~</span><span class="rm-tt">상품화 · 수익화</span></div>
  </div>
- <div class="member">
- <div class="m-avatar">심</div>
- <span class="m-badge">Ph.D · IT정책</span>
- <div class="m-name">심재섭</div>
- <div class="m-field">공공 컨설팅 · 이사</div>
- <div class="m-univ">서울과학기술대학교</div>
- <div class="m-desc">한국능률협회컨설팅 26년<br>행정안전부·제주도청 등<br>140개 기관 컨설팅</div>
+ <div class="phases">
+ <div class="phase">
+ <div class="phase-label">PHASE 1</div>
+ <div class="phase-year">2026</div>
+ <div class="phase-name">연구 · 모델 개발</div>
+ <ul>
+ <li>핵심 분석 모델(NPI) 고도화 및 알고리즘 최적화</li>
+ <li>제주 지역 특화 데이터베이스(DB) 구축 및 정제</li>
+ <li>KCI 등재지 추가 논문 게재로 학술 신뢰도 확보</li>
+ </ul>
  </div>
- <div class="member">
- <div class="m-avatar">김</div>
- <span class="m-badge">Ph.D · 공학</span>
- <div class="m-name">김성훈</div>
- <div class="m-field">안전 / 조선해양공학 · 이사</div>
- <div class="m-univ">서울대학교</div>
- <div class="m-desc">英 로이드 선급 컨설턴트<br>수소/LNG/해양 플랜트 리스크, HAZID/HAZOP/QRA수행<br>FlexBowTie SW 개발</div>
+ <div class="phase">
+ <div class="phase-label">PHASE 2</div>
+ <div class="phase-year">2027</div>
+ <div class="phase-name">시범 적용</div>
+ <ul>
+ <li>지자체 및 공공기관 대상 파일럿 프로젝트 수행</li>
+ <li>정책 현장 적용을 통한 모델 실효성 검증</li>
+ <li>초기 레퍼런스 확보 및 서비스 안정화</li>
+ <li>피드백 반영 서비스 고도화</li>
+ </ul>
  </div>
- <div class="member">
- <div class="m-avatar">고</div>
- <span class="m-badge">Ph.D · 공학</span>
- <div class="m-name">고혁준</div>
- <div class="m-field">블록체인 / IT · 이사</div>
- <div class="m-univ">고려대학교</div>
- <div class="m-desc">삼성SDS 근무 경력<br>블록체인 기술 상용화<br>분산처리 시스템 개발</div>
- </div>
- <div class="member">
- <div class="m-avatar">김</div>
- <span class="m-badge">Ph.D · 경영학</span>
- <div class="m-name">김대훈</div>
- <div class="m-field">회계 / 지역정책 · 감사</div>
- <div class="m-univ">제주대학교</div>
- <div class="m-desc">서귀포시 농촌신활력<br>플러스사업단 사무국장<br>대학 재정지원 평가 전문가</div>
- </div>
- <div class="member">
- <div class="m-avatar" style="background: linear-gradient(135deg, #2d5a27, #4a8f3f);">홍</div>
- <span class="m-badge" style="background:#2d5a27;">대외협력·재무</span>
- <div class="m-name">홍승범</div>
- <div class="m-field">대외협력·재무 · 이사</div>
- <div class="m-univ"> </div>
- <div class="m-desc">연구소 설립 초기<br>재정 지원 및 기반 마련<br>대외협력 총괄</div>
- </div>
+ <div class="phase">
+ <div class="phase-label">PHASE 3</div>
+ <div class="phase-year">2028~</div>
+ <div class="phase-name">상품화 및 수익화</div>
+ <ul>
+ <li>정기 분석 보고서 및 맞춤형 자문 서비스 패키지화</li>
+ <li>구독형 데이터베이스 모델 도입 검토</li>
+ <li>제주 성공 모델 기반 전국 지자체 확산 추진</li>
+ <li>2030년 제주 대표 민간 싱크탱크 도약</li>
+ </ul>
  </div>
  </div>
  </div>
 </section>
 </div>
 
-<!-- SPA: 연구 서비스 (서비스 + 연구실적 + 로드맵) -->
+<!-- SPA: 연구 서비스 (주요서비스 + 실적 + 인력구성) -->
 <div id="page-research" class="spa-page">
+<div class="subtabs" data-panels="services,rnd,team">
+ <button class="subtab active" data-target="services" onclick="switchTab(this)">주요서비스</button>
+ <button class="subtab" data-target="rnd" onclick="switchTab(this)">주요 연구 및 기술개발 실적</button>
+ <button class="subtab" data-target="team" onclick="switchTab(this)">분야별 전문인력 구성</button>
+</div>
 <!-- SERVICES -->
-<section id="services">
+<section id="services" class="subtab-panel active">
  <div class="inner">
  <div class="sec-hd">
  <div class="sec-tag">Services</div>
@@ -1296,7 +1350,7 @@
 </section>
 
 <!-- R&D -->
-<section id="rnd">
+<section id="rnd" class="subtab-panel">
  <div class="inner">
  <div class="sec-hd">
  <div class="sec-tag">R&D Track Record</div>
@@ -1345,48 +1399,63 @@
  </div>
 </section>
 
-<!-- ROADMAP -->
-<section id="roadmap">
+<!-- TEAM: 분야별 전문인력 구성 (연구소 소개에서 이동) -->
+<section id="team" class="subtab-panel">
  <div class="inner">
  <div class="sec-hd">
- <div class="sec-tag">Growth Roadmap</div>
- <h2 class="sec-title">성장 로드맵</h2>
- <p class="sec-desc">2030년 제주 대표 민간 싱크탱크로 도약</p>
+ <div class="sec-tag">Our Team</div>
+ <h2 class="sec-title">분야별 전문 인력 구성</h2>
+ <p class="sec-desc">박사 학위 소지자 100% · 이공계 + 인문사회 융합</p>
  <div class="divider"></div>
  </div>
- <div class="phases">
- <div class="phase">
- <div class="phase-label">PHASE 1</div>
- <div class="phase-year">2026</div>
- <div class="phase-name">연구 · 모델 개발</div>
- <ul>
- <li>핵심 분석 모델(NPI) 고도화 및 알고리즘 최적화</li>
- <li>제주 지역 특화 데이터베이스(DB) 구축 및 정제</li>
- <li>KCI 등재지 추가 논문 게재로 학술 신뢰도 확보</li>
- 
- </ul>
+ <div class="team-grid">
+ <div class="member">
+ <div class="m-avatar">양</div>
+ <span class="m-badge">Ph.D · 경영학</span>
+ <div class="m-name">양인하</div>
+ <div class="m-field">빅데이터 / 경영 · 대표</div>
+ <div class="m-univ">제주대학교</div>
+ <div class="m-desc">뉴스 심리지수(NPI) 개발<br>관광 수요 예측 모형 연구<br>한국능률협회 위원</div>
  </div>
- <div class="phase">
- <div class="phase-label">PHASE 2</div>
- <div class="phase-year">2027</div>
- <div class="phase-name">시범 적용</div>
- <ul>
- <li>지자체 및 공공기관 대상 파일럿 프로젝트 수행</li>
- <li>정책 현장 적용을 통한 모델 실효성 검증</li>
- <li>초기 레퍼런스 확보 및 서비스 안정화</li>
- <li>피드백 반영 서비스 고도화</li>
- </ul>
+ <div class="member">
+ <div class="m-avatar">심</div>
+ <span class="m-badge">Ph.D · IT정책</span>
+ <div class="m-name">심재섭</div>
+ <div class="m-field">공공 컨설팅 · 이사</div>
+ <div class="m-univ">서울과학기술대학교</div>
+ <div class="m-desc">한국능률협회컨설팅 26년<br>행정안전부·제주도청 등<br>140개 기관 컨설팅</div>
  </div>
- <div class="phase">
- <div class="phase-label">PHASE 3</div>
- <div class="phase-year">2028~</div>
- <div class="phase-name">상품화 및 수익화</div>
- <ul>
- <li>정기 분석 보고서 및 맞춤형 자문 서비스 패키지화</li>
- <li>구독형 데이터베이스 모델 도입 검토</li>
- <li>제주 성공 모델 기반 전국 지자체 확산 추진</li>
- <li>2030년 제주 대표 민간 싱크탱크 도약</li>
- </ul>
+ <div class="member">
+ <div class="m-avatar">김</div>
+ <span class="m-badge">Ph.D · 공학</span>
+ <div class="m-name">김성훈</div>
+ <div class="m-field">안전 / 조선해양공학 · 이사</div>
+ <div class="m-univ">서울대학교</div>
+ <div class="m-desc">英 로이드 선급 컨설턴트<br>수소/LNG/해양 플랜트 리스크, HAZID/HAZOP/QRA수행<br>FlexBowTie SW 개발</div>
+ </div>
+ <div class="member">
+ <div class="m-avatar">고</div>
+ <span class="m-badge">Ph.D · 공학</span>
+ <div class="m-name">고혁준</div>
+ <div class="m-field">블록체인 / IT · 이사</div>
+ <div class="m-univ">고려대학교</div>
+ <div class="m-desc">삼성SDS 근무 경력<br>블록체인 기술 상용화<br>분산처리 시스템 개발</div>
+ </div>
+ <div class="member">
+ <div class="m-avatar">김</div>
+ <span class="m-badge">Ph.D · 경영학</span>
+ <div class="m-name">김대훈</div>
+ <div class="m-field">회계 / 지역정책 · 감사</div>
+ <div class="m-univ">제주대학교</div>
+ <div class="m-desc">서귀포시 농촌신활력<br>플러스사업단 사무국장<br>대학 재정지원 평가 전문가</div>
+ </div>
+ <div class="member">
+ <div class="m-avatar" style="background: linear-gradient(135deg, #2d5a27, #4a8f3f);">홍</div>
+ <span class="m-badge" style="background:#2d5a27;">대외협력·재무</span>
+ <div class="m-name">홍승범</div>
+ <div class="m-field">대외협력·재무 · 이사</div>
+ <div class="m-univ"> </div>
+ <div class="m-desc">연구소 설립 초기<br>재정 지원 및 기반 마련<br>대외협력 총괄</div>
  </div>
  </div>
  </div>
@@ -1498,19 +1567,88 @@
 </section>
 </div>
 
-<!-- SPA: 참여 신청 (회원 + 자문 통합) -->
+<!-- SPA: 미디어룸 (언론보도 + 기고·칼럼 + 출판물) -->
+<div id="page-media" class="spa-page">
+<div class="subtabs" data-panels="media-news,media-column,media-book">
+ <button class="subtab active" data-target="media-news" onclick="switchTab(this)">언론보도</button>
+ <button class="subtab" data-target="media-column" onclick="switchTab(this)">기고·칼럼</button>
+ <button class="subtab" data-target="media-book" onclick="switchTab(this)">출판물</button>
+</div>
+
+<!-- 언론보도 -->
+<section id="media-news" class="subtab-panel active">
+ <div class="inner">
+ <div class="sec-hd">
+ <div class="sec-tag">Press</div>
+ <h2 class="sec-title">언론보도</h2>
+ <p class="sec-desc">연구소 관련 언론 보도를 모았습니다</p>
+ <div class="divider"></div>
+ </div>
+ <div class="media-empty">아직 등록된 언론보도가 없습니다. 보도가 나가는 대로 이곳에 추가할 예정입니다.</div>
+ <!--
+   새 언론보도 추가 예시 (아래 블록을 복사해 media-empty 위에 붙여넣고 내용만 수정):
+   <div class="media-card">
+     <div class="media-thumb"></div>
+     <div><h4>기사 제목</h4><span class="src">언론사명 · 2026.00</span></div>
+   </div>
+ -->
+ </div>
+</section>
+
+<!-- 기고·칼럼 -->
+<section id="media-column" class="subtab-panel">
+ <div class="inner">
+ <div class="sec-hd">
+ <div class="sec-tag">Columns</div>
+ <h2 class="sec-title">기고·칼럼</h2>
+ <p class="sec-desc">연구소 이름으로 신문·매체에 연재한 칼럼입니다</p>
+ <div class="divider"></div>
+ </div>
+
+ <!-- 기고칼럼 블록 시작 (새 칼럼은 이 블록을 복사해서 아래 붙여넣고 제목/날짜만 교체) -->
+ <div class="media-card">
+ <div class="media-thumb"></div>
+ <div><h4>기고·칼럼 제목을 입력하세요</h4><span class="src">제주의소리 연재 · 2026.00</span></div>
+ </div>
+ <!-- 기고칼럼 블록 끝 -->
+
+ </div>
+</section>
+
+<!-- 출판물 -->
+<section id="media-book" class="subtab-panel">
+ <div class="inner">
+ <div class="sec-hd">
+ <div class="sec-tag">Publication</div>
+ <h2 class="sec-title">출판물</h2>
+ <p class="sec-desc">연구소가 펴낸 책과 발간물입니다</p>
+ <div class="divider"></div>
+ </div>
+ <div class="book-card">
+ <div class="book-cover"></div>
+ <div>
+ <h3 style="font-family:'Noto Serif KR',serif; font-size:1.2rem; color:var(--navy); margin-bottom:0.6rem;">AI, 모두의 것</h3>
+ <p style="color:var(--gray-600); font-size:0.9rem;">공공지능 시대, 함께 쓸 때 더 나은 세상이 온다 — 2026년 5월 발간 예정</p>
+ </div>
+ </div>
+ </div>
+</section>
+</div>
+
+<!-- SPA: 문의·신청 (가입신청 + 자문의뢰 + 용역의뢰) -->
 <div id="page-join" class="spa-page">
 <section id="join-section">
  <div class="inner">
  <div class="sec-hd">
- <div class="sec-tag">Join & Contact</div>
- <h2 class="sec-title">참여 신청</h2>
- <p class="sec-desc">회원 신청 또는 연구 자문 신청을 선택해 주세요</p>
+ <div class="sec-tag">Contact & Apply</div>
+ <h2 class="sec-title">문의·신청</h2>
+ <p class="sec-desc">목적에 맞는 창구를 선택해 주세요 — 가입, 자문, 용역 신청을 나눠 접수합니다</p>
  <div class="divider"></div>
  </div>
  <div class="join-tabs">
- <button class="join-tab active" onclick="switchJoinTab('member', this)">회원 신청</button>
- <button class="join-tab" onclick="switchJoinTab('consult', this)">자문 신청</button>
+ <button class="join-tab active" onclick="switchJoinTab('member', this)">연구소 가입신청</button>
+ <button class="join-tab" onclick="switchJoinTab('consult', this)">자문의뢰</button>
+ <button class="join-tab" onclick="switchJoinTab('project', this)">용역의뢰</button>
  </div>
  <div id="joinMember" class="join-panel active">
 <!-- MEMBERSHIP 내용 시작 -->
@@ -1718,7 +1856,7 @@
  <div class="consult-wrap">
  <div class="sec-hd">
  <div class="sec-tag">Contact</div>
- <h2 class="sec-title">연구 자문 신청</h2>
+ <h2 class="sec-title">자문의뢰</h2>
  <p class="sec-desc">공공기관, 기업, 연구자, 지역 현안 담당자가 AI·데이터·정책·연구방법 관련 자문을 신청할 수 있습니다. 신청 내용은 접수 후 검토되며, 필요 시 담당자가 개별 연락드립니다.</p>
  <div class="divider"></div>
  </div>
@@ -1764,6 +1902,65 @@
 </div>
 <!-- CONSULT 내용 끝 -->
  </div><!-- joinConsult 끝 -->
+
+ <div id="joinProject" class="join-panel">
+<!-- PROJECT 내용 시작 -->
+<div id="project">
+ <div class="inner">
+ <div class="consult-wrap">
+ <div class="sec-hd">
+ <div class="sec-tag">Contact</div>
+ <h2 class="sec-title">용역의뢰</h2>
+ <p class="sec-desc">계약 기반의 연구용역·데이터 분석 프로젝트를 의뢰하고자 하는 공공기관·기업을 위한 창구입니다. 접수 후 담당자가 개별 연락드립니다.</p>
+ <div class="divider"></div>
+ </div>
+ <div class="cform">
+ <div class="consult-guide">
+ <p><strong>안내:</strong> 기관/기업명, 담당자명, 연락처, 용역 분야, 사업 개요는 필수 입력입니다.</p>
+ <p>접수된 내용은 내부 검토 후 연락드리며, 제출 후 잠시 뒤 접수 안내 문구가 바뀝니다.</p>
+ </div>
+ <form id="projectForm" action="https://script.google.com/macros/s/AKfycbyWYTwbbpqrERCxBoJAlvSXSOcK-zulL2HeZ1TuiTKjudNfkkj7w5GXb2rBwNuGdaF9Sw/exec" method="GET" target="projectHiddenFrame" onsubmit="return handleProjectSubmit();">
+ <div class="frow">
+ <div class="fgrp"><label for="projectOrg">기관/기업명 *</label><input id="projectOrg" name="organization" type="text" placeholder="기관 또는 기업명" required /></div>
+ <div class="fgrp"><label for="projectName">담당자명 *</label><input id="projectName" name="name" type="text" placeholder="성명" required /></div>
+ </div>
+ <div class="frow">
+ <div class="fgrp"><label for="projectPhone">연락처 *</label><input id="projectPhone" name="phone" type="tel" placeholder="010-0000-0000" required /></div>
+ <div class="fgrp"><label for="projectEmail">이메일</label><input id="projectEmail" name="email" type="email" placeholder="email@example.com" /></div>
+ </div>
+ <div class="frow">
+ <div class="fgrp fcol2">
+ <label for="projectTopic">용역 분야 *</label>
+ <select id="projectTopic" name="topic" required>
+ <option value="">-- 분야 선택 --</option>
+ <option value="AI / 빅데이터 분석 (NPI, 수요 예측 등)">AI / 빅데이터 분석 (NPI, 수요 예측 등)</option>
+ <option value="산업 안전 / 위험성 평가 (FlexBowTie, QRA)">산업 안전 / 위험성 평가 (FlexBowTie, QRA)</option>
+ <option value="블록체인 / 보안 시스템">블록체인 / 보안 시스템</option>
+ <option value="공공정책 / 조직 진단 / 경영 전략">공공정책 / 조직 진단 / 경영 전략</option>
+ <option value="지역 현안 / 정책 시뮬레이션">지역 현안 / 정책 시뮬레이션</option>
+ <option value="기타">기타</option>
+ </select>
+ </div>
+ </div>
+ <div class="frow">
+ <div class="fgrp"><label for="projectBudget">예산 규모(선택)</label><input id="projectBudget" name="budget" type="text" placeholder="예: 2,000만원 내외" /></div>
+ <div class="fgrp"><label for="projectSchedule">희망 착수시기(선택)</label><input id="projectSchedule" name="schedule" type="text" placeholder="예: 2026년 3분기" /></div>
+ </div>
+ <div class="frow">
+ <div class="fgrp fcol2"><label for="projectMessage">사업 개요 / 용역 내용 *</label><textarea id="projectMessage" name="message" placeholder="용역 목적, 범위, 기대 결과물 등을 간략히 기재해 주세요..." required></textarea></div>
+ </div>
+ <input type="hidden" name="request_type" value="용역의뢰" />
+ <input type="hidden" name="source_page" value="https://jejuailab.com/#project" />
+ <button id="projectSubmitBtn" class="fsub" type="submit">용역 의뢰하기</button>
+ <p id="projectStatus" class="consult-status">필수 항목을 입력한 뒤 용역 의뢰하기 버튼을 눌러 주세요.</p>
+ </form>
+ <iframe name="projectHiddenFrame" title="project submission" style="display:none;"></iframe>
+ </div>
+ </div>
+ </div>
+</div>
+<!-- PROJECT 내용 끝 -->
+ </div><!-- joinProject 끝 -->
  </div><!-- inner 끝 -->
 </section><!-- join-section 끝 -->
 </div><!-- page-join 끝 -->
@@ -1808,7 +2005,8 @@
  <li><a onclick="showPage('research')" style="cursor:pointer;">연구 서비스</a></li>
  <li><a onclick="showPage('archive')" style="cursor:pointer;">자료실</a></li>
  <li><a onclick="showPage('newsletter')" style="cursor:pointer;">주간브리핑</a></li>
- <li><a onclick="showPage('join')" style="cursor:pointer;">참여 신청</a></li>
+ <li><a onclick="showPage('media')" style="cursor:pointer;">미디어룸</a></li>
+ <li><a onclick="showPage('join')" style="cursor:pointer;">문의·신청</a></li>
  </ul>
  </div>
  <div class="ft-col">
@@ -2097,6 +2295,7 @@
       '#research': 'research',
       '#archive': 'archive',
       '#newsletter': 'newsletter',
+      '#media': 'media',
       '#join': 'join',
       '#consult': 'join'
     };
@@ -2113,15 +2312,29 @@
     if (burger) burger.classList.toggle('open');
   }
 
+  // 범용 서브탭 전환: 버튼의 부모(.subtabs)에 담긴 data-panels 목록 중
+  // 클릭한 버튼의 data-target만 보이고 나머지는 숨김
+  function switchTab(btn) {
+    var group = btn.parentElement;
+    var panelIds = (group.getAttribute('data-panels') || '').split(',');
+    group.querySelectorAll('.subtab').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    var target = btn.getAttribute('data-target');
+    panelIds.forEach(function(id) {
+      var el = document.getElementById(id.trim());
+      if (el) el.classList.toggle('active', id.trim() === target);
+    });
+    window.scrollTo({ top: document.querySelector('header').offsetHeight, behavior: 'smooth' });
+  }
+
+  // 문의·신청 탭 전환: 가입신청 / 자문의뢰 / 용역의뢰
   function switchJoinTab(tab, btn) {
     document.querySelectorAll('.join-tab').forEach(function(b) { b.classList.remove('active'); });
     document.querySelectorAll('.join-panel').forEach(function(p) { p.classList.remove('active'); });
     btn.classList.add('active');
-    if (tab === 'member') {
-      document.getElementById('joinMember').classList.add('active');
-    } else {
-      document.getElementById('joinConsult').classList.add('active');
-    }
+    var panelId = tab === 'member' ? 'joinMember' : (tab === 'consult' ? 'joinConsult' : 'joinProject');
+    var panel = document.getElementById(panelId);
+    if (panel) panel.classList.add('active');
   }
 
   const ADMIN_PW = '581558';
@@ -2342,10 +2555,13 @@
         ? `<div class="arch-note">${escapeHtml(shortNoteParts.join(' · '))}</div>`
         : '';
 
+      const isSelfPublished = isPolicy && it.author && String(it.author).includes('연구소');
+      const selfBadge = isSelfPublished ? `<span class="arch-self-badge">● 연구소 발행</span><br>` : '';
       return `<div class="arch-item" data-type="${escapeHtml(it.type || '')}">
         <div class="arch-top">
           <span class="atype ${tm.cls}">${tm.label}</span>
           <div class="ainfo">
+            ${selfBadge}
             <h4>${escapeHtml(it.title || '')}</h4>
             <span class="meta">${escapeHtml(it.author || '')}${it.date ? ' · ' + escapeHtml(it.date) : ''}</span>
             ${summary}
@@ -2434,7 +2650,7 @@
     let html = '';
     issues.forEach((nl, idx) => {
       const isLatest = (idx === 0);
-      const issueBody = buildIssueHtml(nl, idx);
+      const issueBody = buildIssueHtml(nl, isLatest);
       if (isLatest) {
         html += issueBody;
       } else {
@@ -2451,10 +2667,10 @@
     container.innerHTML = html;
   }
 
-  function buildIssueHtml(nl) {
+  function buildIssueHtml(nl, isLatest) {
     let h = '';
     h += '<div class="nl-header">' +
-      '<div class="nl-badge">📮 제' + nl.issue + '호</div>' +
+      '<div class="nl-badge">📮 제' + nl.issue + '호' + (isLatest ? ' <span style="color:#F2A467;">· LATEST</span>' : '') + '</div>' +
       '<h3>AI융합연구소 주간브리핑</h3>' +
       '<div class="nl-meta">' +
         '<span>📅 발행일: ' + escapeHtml(nl.date || '미정') + '</span>' +
@@ -2981,8 +3197,30 @@ function handleConsultSubmit() {
   return true;
 }
 
+let projectSubmitting = false;
 
-let membershipSubmitting = false;
+function handleProjectSubmit() {
+  const statusEl = document.getElementById('projectStatus');
+  const submitBtn = document.getElementById('projectSubmitBtn');
+  const form = document.getElementById('projectForm');
+
+  if (!form.reportValidity()) {
+    return false;
+  }
+
+  projectSubmitting = true;
+
+  if (statusEl) {
+    statusEl.textContent = '접수 중입니다... 잠시만 기다려 주세요.';
+  }
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.7';
+    submitBtn.textContent = '접수 중...';
+  }
+
+  return true;
+}
 
 function openMembershipForm() {
   const formSection = document.getElementById('membership-form');
@@ -3114,7 +3352,7 @@ window.addEventListener('DOMContentLoaded', function () {
     form.reset();
 
     if (statusEl) {
-      statusEl.textContent = '✅ 자문 신청이 정상적으로 접수되었습니다. 검토 후 연락드리겠습니다.';
+      statusEl.textContent = '✅ 자문의뢰가 정상적으로 접수되었습니다. 검토 후 연락드리겠습니다.';
       statusEl.style.color = '#008B8B';
     }
     if (submitBtn) {
@@ -3123,6 +3361,30 @@ window.addEventListener('DOMContentLoaded', function () {
       submitBtn.textContent = '자문 신청하기';
     }
   });
+
+  const projectIframe = document.querySelector('iframe[name="projectHiddenFrame"]');
+  const projectForm = document.getElementById('projectForm');
+  const projectStatusEl = document.getElementById('projectStatus');
+  const projectSubmitBtn = document.getElementById('projectSubmitBtn');
+
+  if (projectIframe && projectForm) {
+    projectIframe.addEventListener('load', function () {
+      if (!projectSubmitting) return;
+      projectSubmitting = false;
+
+      projectForm.reset();
+
+      if (projectStatusEl) {
+        projectStatusEl.textContent = '✅ 용역의뢰가 정상적으로 접수되었습니다. 검토 후 연락드리겠습니다.';
+        projectStatusEl.style.color = '#008B8B';
+      }
+      if (projectSubmitBtn) {
+        projectSubmitBtn.disabled = false;
+        projectSubmitBtn.style.opacity = '1';
+        projectSubmitBtn.textContent = '용역 의뢰하기';
+      }
+    });
+  }
 });
 </script>
 </body>
