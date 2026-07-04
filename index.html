@@ -43,6 +43,7 @@
       height: 70px;
     }
     .logo { display: flex; align-items: center; gap: 12px; color: #fff; }
+    .logo img { height: 46px !important; max-height: 46px !important; width: auto !important; display: block; }
     .logo-icon {
       width: 40px; height: 40px;
       background: linear-gradient(135deg, var(--cyan), var(--cyan-light));
@@ -68,7 +69,7 @@
     .join-panel { display: none; }
     .join-panel.active { display: block; }
     /* 범용 서브탭 (연구소소개/연구서비스/미디어룸/문의신청 공통) */
-    .subtabs { display: flex; gap: 0.5rem; justify-content: center; margin: 0 0 3rem; flex-wrap: wrap; padding-top: 2.2rem; }
+    .subtabs { display: flex; gap: 0.5rem; justify-content: center; margin: 0 0 3rem; flex-wrap: wrap; padding-top: 6.8rem; }
     .subtab { padding: 0.6rem 1.5rem; border-radius: 25px; border: 2px solid var(--cyan); background: #fff; color: var(--cyan); font-size: 0.86rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
     .subtab.active, .subtab:hover { background: var(--cyan); color: #fff; }
     .subtab-panel { display: none; }
@@ -88,8 +89,9 @@
     .rm-tt { font-family: 'Noto Serif KR', serif; font-size: 1.05rem; font-weight: 700; }
     @media (max-width: 820px) { .roadmap-arrows { flex-direction: column; } .rm-arrow { clip-path: none !important; border-radius: 8px; margin-right: 0; margin-bottom: 8px; } }
     /* 미디어룸 카드 */
-    .media-card { display: flex; gap: 1rem; align-items: flex-start; background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; padding: 1.3rem 1.5rem; margin-bottom: 0.9rem; }
-    .media-thumb { width: 52px; height: 52px; border-radius: 8px; background: var(--cyan-pale); flex-shrink: 0; }
+    .media-card { display: flex; gap: 1rem; align-items: flex-start; background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; padding: 1.3rem 1.5rem; margin-bottom: 0.9rem; text-decoration: none; transition: all 0.2s; }
+    .media-card:hover { box-shadow: 0 8px 22px rgba(0,0,0,0.07); transform: translateY(-2px); border-color: var(--cyan); }
+    .media-thumb { width: 64px; height: 64px; border-radius: 8px; background: var(--cyan-pale); flex-shrink: 0; object-fit: cover; }
     .media-card h4 { font-size: 0.98rem; font-weight: 700; color: var(--navy); margin-bottom: 0.35rem; }
     .media-card .src { font-size: 0.78rem; color: var(--gray-600); }
     .book-card { display: flex; gap: 1.6rem; align-items: center; background: #fff; border: 1px solid var(--gray-200); border-radius: 10px; padding: 1.8rem; }
@@ -1587,10 +1589,12 @@
  <div class="media-empty">아직 등록된 언론보도가 없습니다. 보도가 나가는 대로 이곳에 추가할 예정입니다.</div>
  <!--
    새 언론보도 추가 예시 (아래 블록을 복사해 media-empty 위에 붙여넣고 내용만 수정):
-   <div class="media-card">
-     <div class="media-thumb"></div>
+   - href: 기사 원문 링크
+   - img src: 기사에 실린 사진 (기사 이미지를 다운받아 같은 폴더에 넣고 파일명 지정, 또는 이미지 직접 URL)
+   <a class="media-card" href="기사링크주소" target="_blank" rel="noopener">
+     <img class="media-thumb" src="이미지파일명.jpg" alt="기사 제목">
      <div><h4>기사 제목</h4><span class="src">언론사명 · 2026.00</span></div>
-   </div>
+   </a>
  -->
  </div>
 </section>
@@ -1605,11 +1609,12 @@
  <div class="divider"></div>
  </div>
 
- <!-- 기고칼럼 블록 시작 (새 칼럼은 이 블록을 복사해서 아래 붙여넣고 제목/날짜만 교체) -->
- <div class="media-card">
- <div class="media-thumb"></div>
- <div><h4>왜 지금 ‘인공지능’이 아니고 ‘공공지능’이어야 하나</h4><span class="src">제주의소리 연재 · 2026.06.09</span></div>
- </div>
+ <!-- 기고칼럼 블록 시작 (새 칼럼은 이 블록을 복사해서 아래 붙여넣고 내용만 교체) -->
+ <!-- href: 칼럼 원문 링크 / img src: 칼럼에 실린 사진 -->
+ <a class="media-card" href="https://www.jejusori.net/" target="_blank" rel="noopener">
+ <img class="media-thumb" src="column1.jpg" alt="왜 지금 '인공지능'이 아니고 '공공지능'이어야 하나">
+ <div><h4>왜 지금 '인공지능'이 아니고 '공공지능'이어야 하나</h4><span class="src">제주의소리 연재 · 2026.06.09</span></div>
+ </a>
  <!-- 기고칼럼 블록 끝 -->
 
  </div>
@@ -1628,7 +1633,7 @@
  <div class="book-cover"></div>
  <div>
  <h3 style="font-family:'Noto Serif KR',serif; font-size:1.2rem; color:var(--navy); margin-bottom:0.6rem;">AI, 모두의 것</h3>
- <p style="color:var(--gray-600); font-size:0.9rem;">공공지능 시대, 함께 쓸 때 더 나은 세상이 온다 — 2026년 9월 발간 예정</p>
+ <p style="color:var(--gray-600); font-size:0.9rem;">공공지능 시대, 함께 쓸 때 더 나은 세상이 온다 — 2026년 5월 발간 예정</p>
  </div>
  </div>
  </div>
