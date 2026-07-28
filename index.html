@@ -2525,7 +2525,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const { data, error } = await sb
       .from('media_items')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('date', { ascending: false });
 
     if (error) {
       console.error('미디어룸 조회 실패:', error);
