@@ -518,6 +518,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     .fsub:hover { background: var(--cyan-light); transform: translateY(-2px); }
     .consult-guide { margin: 0 0 1rem; padding: 0.9rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(0,181,181,0.28); color: rgba(255,255,255,0.82); font-size: 0.82rem; line-height: 1.7; }
     .consult-guide strong { color: var(--cyan-light); }
+    .consent-group { margin: 0.4rem 0 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .consent-row { display: flex; align-items: flex-start; gap: 0.55rem; cursor: pointer; font-size: 0.8rem; color: rgba(255,255,255,0.78); line-height: 1.55; }
+    .consent-row input[type="checkbox"] { margin-top: 0.2rem; width: 16px; height: 16px; flex-shrink: 0; accent-color: var(--cyan); cursor: pointer; }
+    .consent-row strong { color: var(--cyan-light); font-weight: 700; }
     .consult-status { margin-top: 0.85rem; font-size: 0.82rem; color: rgba(255,255,255,0.9); min-height: 1.2rem; }
 
     /* ── FOOTER ── */
@@ -1714,7 +1718,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
  </div>
  </div>
 
- <input type="hidden" name="source_page" value="https://jejuailab.com/#membership" />
+<input type="hidden" name="source_page" value="https://jejuailab.com/#membership" />
+
+ <div class="consent-group">
+ <label class="consent-row">
+ <input type="checkbox" id="memberPrivacyAgree" required />
+ <span><strong>[필수]</strong> 개인정보 수집·이용에 동의합니다. (수집 항목: 성명, 연락처, 이메일, 기관/소속명, 관심분야 · 수집 목적: 회원 신청 접수 및 안내 · 보유 기간: 회원 탈퇴 또는 목적 달성 시까지)</span>
+ </label>
+ <label class="consent-row">
+ <input type="checkbox" id="memberAgeAgree" required />
+ <span><strong>[필수]</strong> 만 14세 이상입니다.</span>
+ </label>
+ </div>
 
  <button id="membershipSubmitBtn" class="fsub" type="submit">회원 신청하기</button>
  <p id="membershipStatus" class="consult-status">신청 유형과 필수 항목을 입력한 뒤 회원 신청하기 버튼을 눌러 주세요.</p>
