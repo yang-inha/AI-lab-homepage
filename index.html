@@ -1592,9 +1592,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- SPA: 미디어룸 (언론보도 + 기고·칼럼 + 출판물) -->
 <div id="page-media" class="spa-page">
-<div class="subtabs" data-panels="media-news,media-column,media-book">
+<div class="subtabs" data-panels="media-news,media-column,media-video,media-book">
  <button class="subtab active" data-target="media-news" onclick="switchTab(this)">언론보도</button>
  <button class="subtab" data-target="media-column" onclick="switchTab(this)">기고·칼럼</button>
+ <button class="subtab" data-target="media-video" onclick="switchTab(this)">방송·영상</button>
  <button class="subtab" data-target="media-book" onclick="switchTab(this)">출판물</button>
 </div>
 
@@ -1624,6 +1625,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
  </div>
 </section>
 
+<!-- 방송·영상 -->
+<section id="media-video" class="subtab-panel">
+ <div class="inner">
+ <div class="sec-hd">
+ <div class="sec-tag">Video</div>
+ <h2 class="sec-title">방송·영상</h2>
+ <p class="sec-desc">방송 출연, 인터뷰, 유튜브 영상 등을 모았습니다</p>
+ <div class="divider"></div>
+ </div>
+ <div id="media-video-list"><div class="media-empty">불러오는 중입니다...</div></div>
+ </div>
+</section>
+ 
 <!-- 출판물 -->
 <section id="media-book" class="subtab-panel">
  <div class="inner">
@@ -2143,9 +2157,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
  <div class="af-row">
  <div>
  <label>분류</label>
- <select id="mCategory">
+<select id="mCategory">
  <option value="news">언론보도</option>
  <option value="column">기고·칼럼</option>
+ <option value="video">방송·영상</option>
  <option value="book">출판물</option>
  </select>
  </div>
@@ -2313,7 +2328,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   let mediaLoaded = false;
   let mediaLoadError = '';
   let editingMediaId = null;
-  const mediaCatMap = { news: '언론보도', column: '기고·칼럼', book: '출판물' };
+  const mediaCatMap = { news: '언론보도', column: '기고·칼럼', video: '방송·영상', book: '출판물' };
 
   // ── 뉴스레터: Supabase 연동 ──
   let nlIssues = []; // 메모리 캐시 (issue 내림차순)
@@ -2619,6 +2634,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function renderMedia() {
     renderMediaGroup('news', 'media-news-list');
     renderMediaGroup('column', 'media-column-list');
+    renderMediaGroup('video', 'media-video-list');
     renderMediaGroup('book', 'media-book-list');
   }
 
