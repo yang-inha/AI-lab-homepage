@@ -2592,6 +2592,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     renderAdminMedia();
   }
 
+ function extractYoutubeId(url) {
+  if (!url) return '';
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{6,})/);
+  return m ? m[1] : '';
+}
+
+function getMediaThumb(it) {
+  if (it.image_url) return it.image_url;
+  if (it.category === 'video') {
+    const vid = extractYoutubeId(it.link);
+    if (vid) return 'https://img.youtube.com/vi/' + vid + '/hqdefault.jpg';
+  }
+  return '';
+}
   function renderMediaGroup(category, listElId) {
     const el = document.getElementById(listElId);
     if (!el) return;
@@ -2629,7 +2643,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     el.innerHTML = items.map(it => `
       <a class="media-card" href="${it.link ? escapeHtml(ensureHttps(it.link)) : '#'}" target="_blank" rel="noopener">
-        <img class="media-thumb" src="${it.image_url ? escapeHtml(it.image_url) : ''}" alt="${escapeHtml(it.title || '')}" onerror="this.style.background='var(--cyan-pale)'; this.removeAttribute('src');">
+        <img class="media-thumb" src="${escapeHtml(getMediaThumb(it))}" alt="${escapeHtml(it.title || '')}" onerror="this.style.background='var(--cyan-pale)'; this.removeAttribute('src');">
         <div style="flex:1;">
           <h4>${escapeHtml(it.title || '')}</h4>
           <span class="src">${escapeHtml(it.source || '')}${it.date ? ' · ' + escapeHtml(it.date) : ''}</span>
